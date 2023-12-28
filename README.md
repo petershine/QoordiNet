@@ -1,2 +1,2 @@
 # QoordiNet
-For personal portfolio overview
+Personal Portfolio overview and tracking.
