@@ -16,3 +16,9 @@ th, td {
     padding: 2px;
     text-align: right;
 }
+
+.csv_table 
+table, th, td {
+    text-align: left;
+    font-weight: normal; 
+}
