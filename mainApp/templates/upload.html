@@ -3,11 +3,17 @@
 <head>
     <title>Upload CSV File</title>
     <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <style>
+        body {
+            margin: 4px;
+            padding: 4px;
+        }
+    </style>
 </head>
 <body>
     <h2>Upload CSV File</h2>
     <form action="/display_csv/" enctype="multipart/form-data" method="post">
-        <input name="csv_file" type="file">
+        <input name="csv_file" type="file"></br>
         <input type="submit">
     </form>
 </body>
