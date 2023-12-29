@@ -77,18 +77,37 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getSelectedDataAsTSV(selectedCells) {
-        // Collect data from selected cells and format it as tab-separated values
-        var rows = new Map();
+        // Create a map to hold the data with row and column indices as keys
+        let dataMap = new Map();
+    
         selectedCells.forEach(cell => {
             var rowIndex = cell.parentElement.rowIndex;
-            var cellIndex = cell.cellIndex;
-            if (!rows.has(rowIndex)) {
-                rows.set(rowIndex, []);
+            var colIndex = cell.cellIndex;
+            if (!dataMap.has(rowIndex)) {
+                dataMap.set(rowIndex, new Map());
             }
-            rows.get(rowIndex)[cellIndex] = cell.textContent || cell.innerText;
+            dataMap.get(rowIndex).set(colIndex, cell.textContent || cell.innerText);
         });
-
-        var tsvData = Array.from(rows, ([, cols]) => cols.join('\t')).join('\n');
-        return tsvData;
+    
+        // Find the min and max column indices
+        let minCol = Infinity, maxCol = -Infinity;
+        dataMap.forEach((colMap, _) => {
+            Array.from(colMap.keys()).forEach(colIndex => {
+                if (colIndex < minCol) minCol = colIndex;
+                if (colIndex > maxCol) maxCol = colIndex;
+            });
+        });
+    
+        // Construct the TSV data
+        let tsvData = [];
+        Array.from(dataMap.keys()).sort().forEach(rowIndex => {
+            let rowData = [];
+            for (let colIndex = minCol; colIndex <= maxCol; colIndex++) {
+                rowData.push(dataMap.get(rowIndex).get(colIndex) || '');
+            }
+            tsvData.push(rowData.join('\t'));
+        });
+    
+        return tsvData.join('\n');
     }
 });
