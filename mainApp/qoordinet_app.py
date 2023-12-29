@@ -21,12 +21,15 @@ accountColumnKey = 'Account'
 typeColumnKey = 'Type'
 symbolColumnKey = 'Symbol'
 actionColumnKey = 'Action'
-amountColumnKey = 'Amount'
 premiumColumnKey = 'Premium'
-quantityColumnKey = 'Quantity'
 dividendColumnKey = 'Dividend'
+amountColumnKey = 'Amount'
+quantityColumnKey = 'Quantity'
 
-newlyInsertedColumns = [typeColumnKey, 
+newlyInsertedColumns = [typeColumnKey,
+                        'spacer0',
+                        'spacer1',
+                        'spacer2',
                         premiumColumnKey, 
                         dividendColumnKey,
                         ]
@@ -35,7 +38,10 @@ rearrangedColumns = [runDateColumnKey,
                      accountColumnKey, 
                      typeColumnKey, 
                      symbolColumnKey, 
-                     actionColumnKey, 
+                     actionColumnKey,
+                     'spacer0',
+                     'spacer1',
+                     'spacer2',
                      premiumColumnKey, 
                      dividendColumnKey, 
                      amountColumnKey, 
@@ -80,10 +86,10 @@ class QoordiNetAppManager(BaseApp):
 
         df = df.drop(columns=droppedColumnKeys)
 
-        mainKeyMask = df[runDateColumnKey].apply(self.is_date)
+        runDateKeyMask = df[runDateColumnKey].apply(self.is_date)
         actionKeyMask = df[actionColumnKey].apply(self.without_substring)
         amountKeyMask = df[amountColumnKey].apply(self.is_not_zero)
-        df = df[mainKeyMask]
+        df = df[runDateKeyMask]
         df = df[actionKeyMask]
         df = df[amountKeyMask]
 
@@ -106,18 +112,18 @@ class QoordiNetAppManager(BaseApp):
         df.loc[is_dividend, amountColumnKey] = ''
         df.loc[is_dividend, quantityColumnKey] = ''
 
-        is_debit = (df[actionColumnKey].str.contains('DEBIT', case=False))
-        df.loc[is_debit, quantityColumnKey] = ''
+        is_debit_deposit = (df[actionColumnKey].str.contains('DEBIT', case=False) | df[actionColumnKey].str.contains('DEPOSIT', case=False))
+        df.loc[is_debit_deposit, quantityColumnKey] = ''
 
         is_invested = (df[amountColumnKey] != '') & (df[quantityColumnKey] != '')
         df.loc[is_invested, typeColumnKey] = 'Invested'
 
-        df[aux_debitColumnKey] = df[actionColumnKey].str.contains('DEBIT', case=False)
-        df = df.sort_values(by=[runDateColumnKey, typeColumnKey, actionColumnKey, aux_debitColumnKey, symbolColumnKey], ascending=False)
+        df[aux_debitColumnKey] = is_debit_deposit
+        df = df.sort_values(by=[runDateColumnKey, typeColumnKey, symbolColumnKey, actionColumnKey, aux_debitColumnKey], ascending=False)
 
         df = df.drop(columns=droppableAuxColumns)
         df = df.replace(replacementHash, regex=True)
-        df.loc[(~is_option & ~is_debit), actionColumnKey] = ''
+        df.loc[(~is_option & ~is_debit_deposit), actionColumnKey] = ''
         
         df = df.rename(columns=renamedColumnsHash)
         return df.to_html(classes=styleClasses, index=False)
@@ -132,8 +138,8 @@ class QoordiNetAppManager(BaseApp):
         
     def is_not_zero(self, value: str):
         try:
-            amount = int(value)
-            return (amount != 0)
+            amount = float(value)
+            return (amount != 0.0)
         except ValueError:
             return True
         
