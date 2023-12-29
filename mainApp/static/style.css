@@ -17,8 +17,16 @@ th, td {
     text-align: right;
 }
 
-.csv_table 
-table, th, td {
+.csv_table table, th, td {
     text-align: left;
+}
+.csv_table th {
+    font-weight: bold;
+}
+.csv_table td {
     font-weight: normal; 
+}
+
+.selected {
+    background-color: yellow; /* Example styling for selected table columns */
 }

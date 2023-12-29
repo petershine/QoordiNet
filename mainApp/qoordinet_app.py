@@ -126,7 +126,11 @@ class QoordiNetAppManager(BaseApp):
         df.loc[(~is_option & ~is_debit_deposit), actionColumnKey] = ''
         
         df = df.rename(columns=renamedColumnsHash)
-        return df.to_html(classes=styleClasses, index=False)
+
+        generated_html = df.to_html(classes=styleClasses, index=False)
+        generated_html = generated_html.replace(f'dataframe {styleClasses}', f'{styleClasses}')
+        return generated_html
+
     
 
     def is_date(self, value: str):
