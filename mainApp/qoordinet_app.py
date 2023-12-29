@@ -1,6 +1,7 @@
 from ._shared.managers.baseapp import BaseApp
 
 import pandas as pd
+from pandas import DataFrame
 
 
 droppedColumnKeys = ['Exchange Quantity',
@@ -27,9 +28,6 @@ amountColumnKey = 'Amount'
 quantityColumnKey = 'Quantity'
 
 newlyInsertedColumns = [typeColumnKey,
-                        'spacer0',
-                        'spacer1',
-                        'spacer2',
                         premiumColumnKey, 
                         dividendColumnKey,
                         ]
@@ -39,9 +37,6 @@ rearrangedColumns = [runDateColumnKey,
                      typeColumnKey, 
                      symbolColumnKey, 
                      actionColumnKey,
-                     'spacer0',
-                     'spacer1',
-                     'spacer2',
                      premiumColumnKey, 
                      dividendColumnKey, 
                      amountColumnKey, 
@@ -83,7 +78,14 @@ class QoordiNetAppManager(BaseApp):
 
     def html_table(self, csv_file, styleClasses: str):
         df = pd.read_csv(csv_file.file, skiprows=4, header=0)
+        df = self.revisedDataFrame(df)
 
+        generated_html = df.to_html(classes=styleClasses, index=False)
+        generated_html = generated_html.replace(f'dataframe {styleClasses}', f'{styleClasses}')
+        return generated_html
+    
+
+    def revisedDataFrame(self, df: DataFrame):
         df = df.drop(columns=droppedColumnKeys)
 
         runDateKeyMask = df[runDateColumnKey].apply(self.is_date)
@@ -127,9 +129,7 @@ class QoordiNetAppManager(BaseApp):
         
         df = df.rename(columns=renamedColumnsHash)
 
-        generated_html = df.to_html(classes=styleClasses, index=False)
-        generated_html = generated_html.replace(f'dataframe {styleClasses}', f'{styleClasses}')
-        return generated_html
+        return df
 
     
 
