@@ -114,18 +114,18 @@ class QoordiNetAppManager(BaseApp):
         df.loc[is_dividend, amountColumnKey] = ''
         df.loc[is_dividend, quantityColumnKey] = ''
 
-        is_debit_deposit = (df[actionColumnKey].str.contains('DEBIT', case=False) | df[actionColumnKey].str.contains('DEPOSIT', case=False))
-        df.loc[is_debit_deposit, quantityColumnKey] = ''
+        is_debit_deposit_transfer = df[actionColumnKey].str.contains('DEBIT|DEPOSIT|Transfer', regex=True, case=False)
+        df.loc[is_debit_deposit_transfer, quantityColumnKey] = ''
 
         is_invested = (df[amountColumnKey] != '') & (df[quantityColumnKey] != '')
         df.loc[is_invested, typeColumnKey] = 'Invested'
 
-        df[aux_debitColumnKey] = is_debit_deposit
+        df[aux_debitColumnKey] = is_debit_deposit_transfer
         df = df.sort_values(by=[runDateColumnKey, typeColumnKey, symbolColumnKey, actionColumnKey, aux_debitColumnKey], ascending=False)
 
         df = df.drop(columns=droppableAuxColumns)
         df = df.replace(replacementHash, regex=True)
-        df.loc[(~is_option & ~is_debit_deposit), actionColumnKey] = ''
+        df.loc[(~is_option & ~is_debit_deposit_transfer), actionColumnKey] = ''
         
         df = df.rename(columns=renamedColumnsHash)
 
