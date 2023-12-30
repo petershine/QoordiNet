@@ -88,7 +88,6 @@ class QoordiNetAppManager(BaseApp):
         df = self.revisedDataFrame(df)
 
         generated_html = df.to_html(classes=styleClasses, index=False)
-        generated_html = generated_html.replace(f'dataframe {styleClasses}', f'{styleClasses}')
         return generated_html
     
 
