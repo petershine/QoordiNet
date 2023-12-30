@@ -50,6 +50,13 @@ droppableAuxColumns = [aux_debitColumnKey,
                        aux_tickerColumnKey,
                        ]
 
+sortingPriorityColumns = [runDateColumnKey, 
+                          typeColumnKey, 
+                          symbolColumnKey, 
+                          actionColumnKey, 
+                          aux_debitColumnKey,
+                          ]
+
 replacementHash = {'YOU SOLD OPENING TRANSACTION' : 'OPENING',
                    'YOU SOLD CLOSING TRANSACTION' : 'CLOSING',
                    'YOU BOUGHT OPENING TRANSACTION' : 'OPENING',
@@ -99,7 +106,7 @@ class QoordiNetAppManager(BaseApp):
         df[newlyInsertedColumns] = ''
         df = df[rearrangedColumns]
 
-        is_option = (df[actionColumnKey].str.contains('CALL', case=False) | df[actionColumnKey].str.contains('PUT', case=False))
+        is_option = df[actionColumnKey].str.contains('CALL|PUT', regex=True, case=False)
         df.loc[is_option, typeColumnKey] = 'OPTION'
         df.loc[is_option, premiumColumnKey] = df.loc[is_option, amountColumnKey]
         df.loc[is_option, amountColumnKey] = ''
@@ -121,7 +128,7 @@ class QoordiNetAppManager(BaseApp):
         df.loc[is_invested, typeColumnKey] = 'Invested'
 
         df[aux_debitColumnKey] = is_debit_deposit_transfer
-        df = df.sort_values(by=[runDateColumnKey, typeColumnKey, symbolColumnKey, actionColumnKey, aux_debitColumnKey], ascending=False)
+        df = df.sort_values(by=sortingPriorityColumns, ascending=False)
 
         df = df.drop(columns=droppableAuxColumns)
         df = df.replace(replacementHash, regex=True)
