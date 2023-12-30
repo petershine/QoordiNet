@@ -28,5 +28,5 @@ th, td {
 }
 
 .selected {
-    background-color: lightsteelblue; /* Example styling for selected table columns */
+    background-color: lightcyan;
 }
