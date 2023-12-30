@@ -83,11 +83,16 @@ class QoordiNetAppManager(BaseApp):
         return processed_data
     
 
-    def html_table(self, csv_file, styleClasses: str):
+    def html_table(self, csv_file, shouldDisplayRaw: bool, styleClass: str):
         df = pd.read_csv(csv_file.file, skiprows=4, header=0)
+        
+        if shouldDisplayRaw is True:
+            return df.to_html(classes=styleClass)
+        
+        
         df = self.revisedDataFrame(df)
+        generated_html = df.to_html(classes=styleClass, index=False)
 
-        generated_html = df.to_html(classes=styleClasses, index=False)
         return generated_html
     
 

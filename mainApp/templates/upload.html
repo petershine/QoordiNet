@@ -13,8 +13,11 @@
 <body>
     <h2>Upload CSV File</h2>
     <form action="/display_csv/" enctype="multipart/form-data" method="post">
+        <input type="hidden" name="shouldDisplayRaw" id="shouldDisplayRaw" value="false">
+        
         <input name="csv_file" type="file"></br>
-        <input type="submit">
+        <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='false';">Process Fidelity CSV</button></br>
+        <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='true';">Display raw CSV</button>
     </form>
 </body>
 </html>
