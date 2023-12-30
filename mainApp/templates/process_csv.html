@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Upload CSV File</title>
+    <title>Process CSV</title>
     <link rel="stylesheet" type="text/css" href="/static/style.css">
     <style>
         body, html {
@@ -16,8 +16,8 @@
 </head>
 <body>
     <div class="form-container">
-    <h2>Upload CSV File</h2>
-    <form action="/display_csv/" enctype="multipart/form-data" method="post">
+    <h2>Process CSV</h2>
+    <form action="/display_csv" enctype="multipart/form-data" method="post">
         <input type="hidden" name="shouldDisplayRaw" id="shouldDisplayRaw" value="false">
         
         <input type="file" id="file-upload" name="csv_file" style="display: none;" onchange="updateFileName()">

@@ -30,11 +30,11 @@ async def display_data(request: Request, tab_separated: str = Form(...)):
     return templates.TemplateResponse(app_constants.HTML_TEMPLATE_TABLE, {"request": request, "data": data})
 
 
-@app.get("/upload", response_class=HTMLResponse)
-def read_upload_csv(request: Request):
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_UPLOAD, {"request": request})
+@app.get("/process_csv", response_class=HTMLResponse)
+def read_process_csv(request: Request):
+    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_PROCESS_CSV, {"request": request})
 
-@app.post("/display_csv/", response_class=HTMLResponse)
+@app.post("/display_csv", response_class=HTMLResponse)
 async def display_csv(request: Request, csv_file: UploadFile = File(...), shouldDisplayRaw: bool = Form(False)):
     html_table = webAppManager.html_table(csv_file=csv_file, shouldDisplayRaw=shouldDisplayRaw, styleClass="csv_table")
     return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_CSV, {"request": request, "html_table": html_table})
