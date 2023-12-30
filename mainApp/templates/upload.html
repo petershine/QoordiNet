@@ -4,20 +4,42 @@
     <title>Upload CSV File</title>
     <link rel="stylesheet" type="text/css" href="/static/style.css">
     <style>
-        body {
-            margin: 4px;
-            padding: 4px;
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
         }
     </style>
 </head>
 <body>
+    <div class="form-container">
     <h2>Upload CSV File</h2>
     <form action="/display_csv/" enctype="multipart/form-data" method="post">
         <input type="hidden" name="shouldDisplayRaw" id="shouldDisplayRaw" value="false">
         
-        <input name="csv_file" type="file"></br>
-        <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='false';">Process Fidelity CSV</button></br>
+        <input type="file" id="file-upload" name="csv_file" style="display: none;" onchange="updateFileName()">
+        <label for="file-upload" class="file-upload-button">OPEN CSV FILE</label>
+        <span id="file-name"></span>
+        <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='false';">Process Fidelity CSV</button>
         <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='true';">Display raw CSV</button>
     </form>
+    </div>
+
+
+    <script>
+        function updateFileName() {
+            var input = document.getElementById('file-upload');
+            var fileName = document.getElementById('file-name');
+
+            if (input.files && input.files.length > 0) {
+                fileName.textContent = input.files[0].name;
+            } else {
+                fileName.textContent = '';
+            }
+        }
+    </script>
 </body>
 </html>
