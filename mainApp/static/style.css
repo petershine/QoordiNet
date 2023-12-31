@@ -34,11 +34,12 @@ th, td {
 
 
 .form-container {
-    width: 300px; /* Adjust as needed */
+    width: 320px; /* Adjust as needed */
     padding: 20px;
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    font-size: 12pt;
 }
 
 .file-upload-button {
@@ -86,6 +87,7 @@ button[type="submit"], input[type="submit"] {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 12pt;
 }
 
 button[type="submit"]:hover, input[type="submit"]:hover {
