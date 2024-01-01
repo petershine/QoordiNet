@@ -63,9 +63,9 @@ replacementHash = {'YOU SOLD OPENING TRANSACTION' : 'OPENING',
                    'YOU BOUGHT CLOSING TRANSACTION' : 'CLOSING',
                    'YOU BOUGHT' : '',
                    'YOU SOLD' : '',
-                   '\(100 SHS\)' : '',
-                   '\(Margin\)' : '',
-                   '\(Cash\)' : '',
+                   '\\(100 SHS\\)' : '',
+                   '\\(Margin\\)' : '',
+                   '\\(Cash\\)' : '',
                    }
 
 renamedColumnsHash = {runDateColumnKey : 'Date',
