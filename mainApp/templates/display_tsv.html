@@ -2,19 +2,19 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Display Data</title>
+        <title>TSV Table Display</title>
         <link rel="stylesheet" type="text/css" href="/static/style.css">
     </head>
 <body>
-    <table>
-        <tr>
+    <table class="csv_table">
+        <!-- <tr>
             <th>Date</th>
             <th>Account</th>
             <th>Status</th>
             <th>Availability</th>
             <th>Description</th>
             <th>Amount</th>
-        </tr>
+        </tr> -->
         {% for row in data %}
         <tr>
             {% for cell in row %}
@@ -23,5 +23,6 @@
         </tr>
         {% endfor %}
     </table>
+    <script src="/static/selectTableCells.js" defer></script>
 </body>
 </html>

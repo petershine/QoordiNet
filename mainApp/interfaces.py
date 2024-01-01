@@ -20,16 +20,6 @@ app.mount("/static", StaticFiles(directory=app_constants.HTML_STATIC_DIRECTORY),
 def read_root(request: Request):
     return RedirectResponse(url=f"/docs")
 
-@app.get("/form", response_class=HTMLResponse)
-async def read_form(request: Request):
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_FORM, {"request": request})
-
-@app.post("/display", response_class=HTMLResponse)
-async def display_data(request: Request, tab_separated: str = Form(...)):
-    data = webAppManager.process_data(tab_separated)
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_TABLE, {"request": request, "data": data})
-
-
 @app.get("/process_csv", response_class=HTMLResponse)
 def read_process_csv(request: Request):
     return templates.TemplateResponse(app_constants.HTML_TEMPLATE_PROCESS_CSV, {"request": request})
@@ -38,3 +28,8 @@ def read_process_csv(request: Request):
 async def display_csv(request: Request, csv_file: UploadFile = File(...), shouldDisplayRaw: bool = Form(False)):
     html_table = webAppManager.html_table(csv_file=csv_file, shouldDisplayRaw=shouldDisplayRaw, styleClass="csv_table")
     return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_CSV, {"request": request, "html_table": html_table})
+
+@app.post("/display_tsv", response_class=HTMLResponse)
+async def display_data(request: Request, tab_separated: str = Form(...)):
+    data = webAppManager.process_data(tab_separated)
+    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_TSV, {"request": request, "data": data})
