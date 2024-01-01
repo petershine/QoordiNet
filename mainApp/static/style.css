@@ -33,9 +33,19 @@ th, td {
 }
 
 
+.page-multi-forms {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    gap: 20px;
+}
+
 .form-container {
     width: 320px; /* Adjust as needed */
-    padding: 20px;
+    padding: 10px;
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
