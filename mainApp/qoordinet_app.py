@@ -132,6 +132,8 @@ class QoordiNetAppManager(BaseApp):
         df.loc[is_invested, typeColumnKey] = 'Invested'
 
         df[aux_debitColumnKey] = is_debit_deposit_transfer
+        df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey])
+
         df = df.sort_values(by=sortingPriorityColumns, ascending=False)
 
         df = df.drop(columns=droppableAuxColumns)
