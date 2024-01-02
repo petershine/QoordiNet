@@ -125,7 +125,7 @@ class QoordiNetAppManager(BaseApp):
         df.loc[is_dividend, amountColumnKey] = ''
         df.loc[is_dividend, quantityColumnKey] = ''
 
-        is_debit_deposit_transfer = df[actionColumnKey].str.contains('DEBIT|DEPOSIT|Transfer', regex=True, case=False)
+        is_debit_deposit_transfer = df[actionColumnKey].str.contains('DEBIT|DEPOSIT|Transfer|CASH CONTRIBUTION', regex=True, case=False)
         df.loc[is_debit_deposit_transfer, quantityColumnKey] = ''
 
         is_invested = (df[amountColumnKey] != '') & (df[quantityColumnKey] != '')
