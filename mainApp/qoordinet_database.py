@@ -12,6 +12,6 @@ class QoordiNetSQLiteManager:
         self.engine = create_engine(sqlitePath, echo=shouldEcho)
 
         from .qoordinet_orm import QoordiNetBase
-        QoordiNetBase.metadata.create_all(self.engine)
+        # QoordiNetBase.metadata.create_all(self.engine)
 
     

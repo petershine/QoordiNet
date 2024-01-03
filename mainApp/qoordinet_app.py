@@ -104,6 +104,15 @@ class QoordiNetAppManager(BaseApp):
 
         return generated_html
     
+    def save_into_database(self, csv_file, styleClass: str):
+        df = pd.read_csv(csv_file.file, skiprows=4, header=0)
+        df = self.revisedDataFrame(df)
+
+        df.to_sql('qoordinetActivities', con=self.databaseManager.engine, if_exists='append', index=False)
+
+        generated_html = df.to_html(classes=styleClass, index=False)
+        return generated_html
+    
 
     def revisedDataFrame(self, df: DataFrame):
         df = df.drop(columns=droppedColumnKeys)

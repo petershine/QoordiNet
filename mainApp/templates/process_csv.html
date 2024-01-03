@@ -9,11 +9,14 @@
     <h2>Process CSV</h2>
     <form action="/display_csv" enctype="multipart/form-data" method="post">
         <input type="hidden" name="shouldDisplayRaw" id="shouldDisplayRaw" value="false">
+        <input type="hidden" name="shouldSaveIntoDatabase" id="shouldSaveIntoDatabase" value="false">
         
         <input type="file" id="file-upload" name="csv_file" style="display: none;" onchange="updateFileName()">
         <label for="file-upload" class="file-upload-button">OPEN CSV FILE</label>
         <span id="file-name"></span>
+        
         <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='false';">Process Fidelity CSV</button>
+        <button type="submit" onclick="document.getElementById('shouldSaveIntoDatabase').value='true';">Save into Database</button>
         <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='true';">Display raw CSV</button>
     </form>
     </div>

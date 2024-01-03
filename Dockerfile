@@ -19,4 +19,4 @@ COPY ./mainApp/templates ./mainApp/templates
 COPY ./mainApp/static ./mainApp/static
 
 
-CMD ["python", "-m", "mainApp"]
+CMD ["python", "-m", "mainApp", "--verbose"]
