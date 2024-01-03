@@ -1,3 +1,4 @@
+from . import app_constants
 from ._shared.managers.baseapp import BaseApp
 
 import pandas as pd
@@ -77,6 +78,14 @@ renamedColumnsHash = {runDateColumnKey : 'Date',
 
 
 class QoordiNetAppManager(BaseApp):
+    def __init__(self, appName, logFilePath):
+        super().__init__(appName, logFilePath)
+
+        from .qoordinet_database import QoordiNetSQLiteManager
+        self.databaseManager = QoordiNetSQLiteManager()
+        self.databaseManager.prepareEngine(sqlitePath=app_constants.SQLITE_PATH, shouldEcho=self.args.verbose)
+        
+
     def process_data(self, tab_separated):
         rows = tab_separated.strip().split("\n")
         processed_data = [row.split("\t") for row in rows]
@@ -125,20 +134,20 @@ class QoordiNetAppManager(BaseApp):
         df.loc[is_dividend, amountColumnKey] = ''
         df.loc[is_dividend, quantityColumnKey] = ''
 
-        is_debit_deposit_transfer = df[actionColumnKey].str.contains('DEBIT|DEPOSIT|Transfer|CASH CONTRIBUTION', regex=True, case=False)
-        df.loc[is_debit_deposit_transfer, quantityColumnKey] = ''
+        is_other_transactions = df[actionColumnKey].str.contains('DEBIT|DEPOSIT|Transfer|CASH CONTRIBUTION', regex=True, case=False)
+        df.loc[is_other_transactions, quantityColumnKey] = ''
 
         is_invested = (df[amountColumnKey] != '') & (df[quantityColumnKey] != '')
         df.loc[is_invested, typeColumnKey] = 'Invested'
 
-        df[aux_debitColumnKey] = is_debit_deposit_transfer
+        df[aux_debitColumnKey] = is_other_transactions
         df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey])
 
         df = df.sort_values(by=sortingPriorityColumns, ascending=False)
 
         df = df.drop(columns=droppableAuxColumns)
         df = df.replace(replacementHash, regex=True)
-        df.loc[(~is_option & ~is_debit_deposit_transfer), actionColumnKey] = ''
+        df.loc[(~is_option & ~is_other_transactions), actionColumnKey] = ''
         
         df = df.rename(columns=renamedColumnsHash)
 
