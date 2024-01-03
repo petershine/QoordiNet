@@ -108,9 +108,12 @@ class QoordiNetAppManager(BaseApp):
         df = pd.read_csv(csv_file.file, skiprows=4, header=0)
         df = self.revisedDataFrame(df)
 
-        df.to_sql('qoordinetActivities', con=self.databaseManager.engine, if_exists='append', index=False)
+        table_name = 'qoordinetActivities'
+        df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
 
-        generated_html = df.to_html(classes=styleClass, index=False)
+        loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
+        generated_html = loadedDf.to_html(classes=styleClass, index=False)
+        
         return generated_html
     
 
