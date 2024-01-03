@@ -1,4 +1,5 @@
-from typing import date
+from datetime import date
+
 from typing import List
 from typing import Optional
 
@@ -25,7 +26,7 @@ class QoordiNetActivities(QoordiNetBase):
     activityType: Mapped[Optional[str]]
 
     ticker: Mapped[Optional[str]]
-    note: [Mapped][Optional[str]]
+    note: Mapped[Optional[str]]
 
     premium: Mapped[Optional[float]]
     dividend: Mapped[Optional[float]]
