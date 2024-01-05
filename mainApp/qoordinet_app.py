@@ -92,6 +92,12 @@ class QoordiNetAppManager(BaseApp):
         processed_data = [row.split("\t") for row in rows]
         return processed_data
     
+    def activities_table(self, styleClass: str):
+        loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
+        loadedDf.fillna("", inplace=True)
+        generated_html = loadedDf.to_html(classes=styleClass, index=False)
+        
+        return generated_html
 
     def html_table(self, csv_file, shouldDisplayRaw: bool, styleClass: str):
         if shouldDisplayRaw is True:
@@ -110,11 +116,7 @@ class QoordiNetAppManager(BaseApp):
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
 
-        loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
-        loadedDf.fillna("", inplace=True)
-        generated_html = loadedDf.to_html(classes=styleClass, index=False)
-        
-        return generated_html
+        return self.activities_table(styleClass=styleClass)
     
     def build_database(self, csv_file, styleClass: str):
         df = pd.read_csv(csv_file.file, header=0)
@@ -123,11 +125,7 @@ class QoordiNetAppManager(BaseApp):
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
 
-        loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
-        loadedDf.fillna("", inplace=True)
-        generated_html = loadedDf.to_html(classes=styleClass, index=False)
-        
-        return generated_html
+        return self.activities_table(styleClass=styleClass)
 
 
     def revisedDataFrame(self, df: DataFrame):
