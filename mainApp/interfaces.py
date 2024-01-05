@@ -28,12 +28,12 @@ def read_process_csv(request: Request):
     return templates.TemplateResponse(app_constants.HTML_TEMPLATE_PROCESS_CSV, {"request": request})
 
 @app.post("/display_csv", response_class=HTMLResponse)
-async def display_csv(request: Request, csv_file: UploadFile = File(...), shouldDisplayRaw: bool = Form(False), shouldSaveIntoDatabase: bool = Form(False)):
+async def display_csv(request: Request, csv_file: UploadFile = File(...), shouldDisplayRaw: bool = Form(False), shouldSaveIntoDatabase: bool = Form(False), numberOfDays: int = Form(1)):
     html_table = None
     if shouldSaveIntoDatabase:
-        html_table = webAppManager.save_into_database(csv_file=csv_file, styleClass="csv_table")
+        html_table = webAppManager.save_into_database(csv_file=csv_file, styleClass="csv_table", numberOfDays=numberOfDays)
     else:
-        html_table = webAppManager.html_table(csv_file=csv_file, shouldDisplayRaw=shouldDisplayRaw, styleClass="csv_table")
+        html_table = webAppManager.html_table(csv_file=csv_file, shouldDisplayRaw=shouldDisplayRaw, styleClass="csv_table", numberOfDays=numberOfDays)
 
     return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_CSV, {"request": request, "html_table": html_table})
 

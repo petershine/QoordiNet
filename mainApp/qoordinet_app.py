@@ -99,20 +99,20 @@ class QoordiNetAppManager(BaseApp):
         
         return generated_html
 
-    def html_table(self, csv_file, shouldDisplayRaw: bool, styleClass: str):
+    def html_table(self, csv_file, shouldDisplayRaw: bool, styleClass: str, numberOfDays: int):
         if shouldDisplayRaw is True:
             df = pd.read_csv(csv_file.file, header=0)
             return df.to_html(classes=styleClass)
         
         df = pd.read_csv(csv_file.file, skiprows=4, header=0)
-        df = self.revisedDataFrame(df)
+        df = self.revisedDataFrame(df, numberOfDays)
         generated_html = df.to_html(classes=styleClass, index=False)
 
         return generated_html
     
-    def save_into_database(self, csv_file, styleClass: str):
+    def save_into_database(self, csv_file, styleClass: str, numberOfDays: int):
         df = pd.read_csv(csv_file.file, skiprows=4, header=0)
-        df = self.revisedDataFrame(df)
+        df = self.revisedDataFrame(df, numberOfDays)
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
 
@@ -128,7 +128,7 @@ class QoordiNetAppManager(BaseApp):
         return self.activities_table(styleClass=styleClass)
 
 
-    def revisedDataFrame(self, df: DataFrame):
+    def revisedDataFrame(self, df: DataFrame, numberOfDays: int):
         df = df.drop(columns=droppedColumnKeys)
 
         runDateKeyMask = df[runDateColumnKey].apply(self.is_date)
@@ -174,9 +174,13 @@ class QoordiNetAppManager(BaseApp):
         df = df.replace(replacementHash, regex=True)
         df.loc[(~is_option & ~is_other_transactions), actionColumnKey] = ''
         
-        df = df.rename(columns=renamedColumnsHash)
+        latest_dates = df[runDateColumnKey].drop_duplicates().nlargest(numberOfDays)
+        selected_rows = df[df[runDateColumnKey].isin(latest_dates)]
+        df = selected_rows
+        
+        revisedDataFrame = df.rename(columns=renamedColumnsHash)
 
-        return df
+        return revisedDataFrame
 
     
 
