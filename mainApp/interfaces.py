@@ -18,7 +18,7 @@ app.mount("/static", StaticFiles(directory=app_constants.HTML_STATIC_DIRECTORY),
 
 @app.get("/")
 def read_root(request: Request):
-    return RedirectResponse(url=f"/docs")
+    return RedirectResponse(url=f"/process_csv")
 
 @app.get("/process_csv", response_class=HTMLResponse)
 def read_process_csv(request: Request):
@@ -32,6 +32,11 @@ async def display_csv(request: Request, csv_file: UploadFile = File(...), should
     else:
         html_table = webAppManager.html_table(csv_file=csv_file, shouldDisplayRaw=shouldDisplayRaw, styleClass="csv_table")
 
+    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_CSV, {"request": request, "html_table": html_table})
+
+@app.post("/build_database", response_class=HTMLResponse)
+async def build_database(request: Request, csv_file: UploadFile = File(...)):
+    html_table = webAppManager.build_database(csv_file=csv_file, styleClass="csv_table")
     return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_CSV, {"request": request, "html_table": html_table})
 
 

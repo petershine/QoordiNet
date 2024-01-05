@@ -76,6 +76,7 @@ renamedColumnsHash = {runDateColumnKey : 'Date',
                       quantityColumnKey : 'Share',
                       }
 
+table_name = 'qoordinetActivities'
 
 class QoordiNetAppManager(BaseApp):
     def __init__(self, appName, logFilePath):
@@ -107,7 +108,6 @@ class QoordiNetAppManager(BaseApp):
         df = pd.read_csv(csv_file.file, skiprows=4, header=0)
         df = self.revisedDataFrame(df)
 
-        table_name = 'qoordinetActivities'
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
 
         loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
@@ -115,6 +115,17 @@ class QoordiNetAppManager(BaseApp):
         
         return generated_html
     
+    def build_database(self, csv_file, styleClass: str):
+        df = pd.read_csv(csv_file.file, header=0)
+        df.fillna("", inplace=True)
+
+        df.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
+
+        loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
+        generated_html = loadedDf.to_html(classes=styleClass, index=False)
+        
+        return generated_html
+
 
     def revisedDataFrame(self, df: DataFrame):
         df = df.drop(columns=droppedColumnKeys)

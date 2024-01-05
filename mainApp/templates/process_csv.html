@@ -11,13 +11,25 @@
         <input type="hidden" name="shouldDisplayRaw" id="shouldDisplayRaw" value="false">
         <input type="hidden" name="shouldSaveIntoDatabase" id="shouldSaveIntoDatabase" value="false">
         
-        <input type="file" id="file-upload" name="csv_file" style="display: none;" onchange="updateFileName()">
-        <label for="file-upload" class="file-upload-button">OPEN CSV FILE</label>
-        <span id="file-name"></span>
+        <input type="file" id="file-upload-0" name="csv_file" style="display: none;" onchange="updateFileName(this)" file-name-span-id="file-name-0">
+        <label for="file-upload-0" class="file-upload-button">OPEN CSV FILE</label>
+        <span id="file-name-0"></span>
         
         <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='false';">Process Fidelity CSV</button>
         <button type="submit" onclick="document.getElementById('shouldSaveIntoDatabase').value='true';">Save into Database</button>
         <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='true';">Display raw CSV</button>
+    </form>
+    </div>
+
+    <div class="form-container">
+    <h2>(Re)Build Database</h2>
+    <form action="/build_database" enctype="multipart/form-data" method="post">
+        
+        <input type="file" id="file-upload-1" name="csv_file" style="display: none;" onchange="updateFileName(this)" file-name-span-id="file-name-1">
+        <label for="file-upload-1" class="file-upload-button">OPEN CSV FILE</label>
+        <span id="file-name-1"></span>
+
+        <button type="submit">(Re)Build</button>
     </form>
     </div>
 
@@ -30,14 +42,14 @@
     </div>
 
     <script>
-        function updateFileName() {
-            var input = document.getElementById('file-upload');
-            var fileName = document.getElementById('file-name');
+        function updateFileName(inputElement) {
+            var fileNameSpanId = inputElement.getAttribute('file-name-span-id')
+            var fileNameSpan = document.getElementById(fileNameSpanId);
 
-            if (input.files && input.files.length > 0) {
-                fileName.textContent = input.files[0].name;
+            if (inputElement.files && inputElement.files.length > 0) {
+                fileNameSpan.textContent = inputElement.files[0].name;
             } else {
-                fileName.textContent = '';
+                fileNameSpan.textContent = '';
             }
         }
     </script>
