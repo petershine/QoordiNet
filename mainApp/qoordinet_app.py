@@ -111,17 +111,18 @@ class QoordiNetAppManager(BaseApp):
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
 
         loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
+        loadedDf.fillna("", inplace=True)
         generated_html = loadedDf.to_html(classes=styleClass, index=False)
         
         return generated_html
     
     def build_database(self, csv_file, styleClass: str):
         df = pd.read_csv(csv_file.file, header=0)
-        df.fillna("", inplace=True)
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
 
         loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
+        loadedDf.fillna("", inplace=True)
         generated_html = loadedDf.to_html(classes=styleClass, index=False)
         
         return generated_html
