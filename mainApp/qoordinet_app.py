@@ -162,7 +162,7 @@ class QoordiNetAppManager(BaseApp):
         is_other_transactions = df[actionColumnKey].str.contains('DEBIT|DEPOSIT|Transfer|CASH CONTRIBUTION', regex=True, case=False)
         df.loc[is_other_transactions, quantityColumnKey] = None
 
-        is_invested = (df[amountColumnKey] != None) & (df[quantityColumnKey] != None)
+        is_invested = (df[amountColumnKey].isna() == False) & (df[quantityColumnKey].isna() == False)
         df.loc[is_invested, typeColumnKey] = 'Invested'
 
         df[aux_debitColumnKey] = is_other_transactions
