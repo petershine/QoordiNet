@@ -118,6 +118,8 @@ class QoordiNetAppManager(BaseApp):
     
     def build_database(self, csv_file, styleClass: str):
         df = pd.read_csv(csv_file.file, header=0)
+        runDateKeyMask = df['Date'].apply(self.is_date)
+        df = df[runDateKeyMask]
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
 
@@ -139,14 +141,16 @@ class QoordiNetAppManager(BaseApp):
         df = df[amountKeyMask]
 
     
-        df[newlyInsertedColumns] = ''
+        df[typeColumnKey] = ''
+        df[premiumColumnKey] = None
+        df[dividendColumnKey] = None
         df = df[rearrangedColumns]
 
         is_option = df[actionColumnKey].str.contains('CALL|PUT', regex=True, case=False)
         df.loc[is_option, typeColumnKey] = 'OPTION'
         df.loc[is_option, premiumColumnKey] = df.loc[is_option, amountColumnKey]
-        df.loc[is_option, amountColumnKey] = ''
-        df.loc[is_option, quantityColumnKey] = ''
+        df.loc[is_option, amountColumnKey] = None
+        df.loc[is_option, quantityColumnKey] = None
 
         df[aux_tickerColumnKey] = df[symbolColumnKey].str.extract(r'-([A-Z]+)').fillna('')
         df.loc[is_option, symbolColumnKey] = df.loc[is_option, aux_tickerColumnKey]
@@ -154,13 +158,13 @@ class QoordiNetAppManager(BaseApp):
         is_dividend = (df[actionColumnKey].str.contains('DIVIDEND', case=False))
         df.loc[is_dividend, typeColumnKey] = 'dividend'
         df.loc[is_dividend, dividendColumnKey] = df.loc[is_dividend, amountColumnKey]
-        df.loc[is_dividend, amountColumnKey] = ''
-        df.loc[is_dividend, quantityColumnKey] = ''
+        df.loc[is_dividend, amountColumnKey] = None
+        df.loc[is_dividend, quantityColumnKey] = None
 
         is_other_transactions = df[actionColumnKey].str.contains('DEBIT|DEPOSIT|Transfer|CASH CONTRIBUTION', regex=True, case=False)
-        df.loc[is_other_transactions, quantityColumnKey] = ''
+        df.loc[is_other_transactions, quantityColumnKey] = None
 
-        is_invested = (df[amountColumnKey] != '') & (df[quantityColumnKey] != '')
+        is_invested = (df[amountColumnKey] != None) & (df[quantityColumnKey] != None)
         df.loc[is_invested, typeColumnKey] = 'Invested'
 
         df[aux_debitColumnKey] = is_other_transactions
