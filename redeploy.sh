@@ -5,7 +5,7 @@ dockerImageName="qoordinet"
 dockerVolumePath="~/fXDocker/_volume"
 dockerMountedRoot="/_python/_mounted"
 
-dockerPortNumber=8083
+dockerPortNumber=50002
 
 
 TEMP_COLOR='\033[0;37m'
