@@ -110,14 +110,13 @@ class QoordiNetAppManager(BaseApp):
         generated_html = df.to_html(classes=styleClass, index=False)
 
         return generated_html
+
     
     def save_into_database(self, csv_file, styleClass: str, numberOfDays: int):
         df = pd.read_csv(csv_file.file, skiprows=4, header=0)
         df = self.revisedDataFrame(df, numberOfDays)
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
-
-        return self.activities_table(styleClass=styleClass)
     
     def build_database(self, csv_file, styleClass: str):
         df = pd.read_csv(csv_file.file, header=0)
@@ -125,8 +124,6 @@ class QoordiNetAppManager(BaseApp):
         df = df[runDateKeyMask]
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
-
-        return self.activities_table(styleClass=styleClass)
 
 
     def revisedDataFrame(self, df: DataFrame, numberOfDays: int):
