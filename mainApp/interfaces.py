@@ -29,7 +29,7 @@ def read_process_csv(request: Request):
 
 @app.post("/display_csv")
 async def display_csv(request: Request, csv_file: UploadFile = File(...), shouldDisplayRaw: bool = Form(False), shouldSaveIntoDatabase: bool = Form(False), numberOfDays: int = Form(1)):
-    if shouldSaveIntoDatabase == False:
+    if shouldSaveIntoDatabase:
         webAppManager.save_into_database(csv_file=csv_file, styleClass="csv_table", numberOfDays=numberOfDays)
         return RedirectResponse(url="/", status_code=303)
         
