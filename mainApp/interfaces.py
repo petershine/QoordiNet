@@ -33,8 +33,8 @@ async def display_csv(request: Request, csv_file: UploadFile = File(...), should
         webAppManager.save_into_database(csv_file=csv_file, styleClass="csv_table", numberOfDays=numberOfDays)
         return RedirectResponse(url="/", status_code=303)
         
-    html_table = webAppManager.html_table(csv_file=csv_file, shouldDisplayRaw=shouldDisplayRaw, styleClass="csv_table", numberOfDays=numberOfDays)
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_CSV, {"request": request, "html_table": html_table})
+    html_csv_table = webAppManager.html_table(csv_file=csv_file, shouldDisplayRaw=shouldDisplayRaw, styleClass="csv_table", numberOfDays=numberOfDays)
+    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_CSV, {"request": request, "html_table": html_csv_table})
     
 @app.post("/build_database", response_class=RedirectResponse)
 async def build_database(request: Request, csv_file: UploadFile = File(...)):
