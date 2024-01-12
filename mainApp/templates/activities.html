@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Qoordi.net</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+</head>
+
+<body>
+    <table class="qoordinet_table">
+        <thead>
+            <tr>
+                <!-- Table Headers -->
+                <!-- Example: <th>Name</th><th>Age</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data rows will be inserted here -->
+        </tbody>
+    </table>
+
+
+    <script src="/static/selectTableCells.js" defer></script>
+    <script>
+        async function fetchAndDisplayData() {
+            try {
+                const response = await fetch('/activities');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const jsonData = await response.json(); // This is your array of dictionaries
+                console.log(jsonData)
+                
+                // Get the first element with class 'qoordinet_table'
+                const table = document.getElementsByClassName('qoordinet_table')[0].getElementsByTagName('tbody')[0];
+
+                jsonData.forEach(item => {
+                    const row = table.insertRow();
+                    // Assuming 'item' is a dictionary like { key1: 'value1', key2: 'value2', ... }
+                    Object.values(item).forEach(text => {
+                        const cell = row.insertCell();
+                        cell.textContent = text;
+                    });
+                });
+            } catch (error) {
+                console.error('Fetch error:', error);
+            }
+        }
+
+        fetchAndDisplayData();
+
+    </script>
+</body>
+
+</html>

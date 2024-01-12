@@ -85,6 +85,13 @@ class QoordiNetAppManager(BaseApp):
         from .qoordinet_database import QoordiNetSQLiteManager
         self.databaseManager = QoordiNetSQLiteManager()
         self.databaseManager.prepareEngine(sqlitePath=app_constants.SQLITE_PATH, shouldEcho=self.args.verbose)
+
+
+    def activities_list(self):
+        loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
+        loadedDf.fillna("", inplace=True)
+        generated_list = loadedDf.to_dict(orient='records')
+        return generated_list
         
 
     def process_data(self, tab_separated):
@@ -95,9 +102,9 @@ class QoordiNetAppManager(BaseApp):
     def activities_table(self, styleClass: str):
         loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
         loadedDf.fillna("", inplace=True)
-        generated_html = loadedDf.to_html(classes=styleClass, index=False)
-        
+        generated_html = loadedDf.to_html(classes=styleClass, index=False)    
         return generated_html
+    
 
     def html_table(self, csv_file, shouldDisplayRaw: bool, styleClass: str, numberOfDays: int):
         if shouldDisplayRaw is True:

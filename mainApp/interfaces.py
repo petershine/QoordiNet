@@ -3,7 +3,7 @@ from . import app_constants
 
 from fastapi import FastAPI, Form, Request
 from fastapi import File, UploadFile
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import JSONResponse, HTMLResponse, RedirectResponse
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -19,8 +19,12 @@ app.mount("/static", StaticFiles(directory=app_constants.HTML_STATIC_DIRECTORY),
 @app.get("/")
 def read_root(request: Request):
     #return RedirectResponse(url=f"/process_csv")
-    html_activities_table = webAppManager.activities_table(styleClass="qoordinet_table")
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_CSV, {"request": request, "html_table": html_activities_table})
+    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_ACTIVITIES, {"request": request})
+
+@app.get("/activities")
+async def get_activities(request: Request, response_class=JSONResponse):
+    json_activities = webAppManager.activities_list()
+    return json_activities
 
 
 @app.get("/process_csv", response_class=HTMLResponse)
