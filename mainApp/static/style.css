@@ -18,13 +18,13 @@ th, td {
 }
 
 
-.csv_table table, th, td {
+.qoordinet_table table, th, td {
     text-align: left;
 }
-.csv_table th {
+.qoordinet_table th {
     font-weight: bold;
 }
-.csv_table td {
+.qoordinet_table td {
     font-weight: normal; 
 }
 

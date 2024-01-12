@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var tables = document.getElementsByClassName('csv_table');
+    var tables = document.getElementsByClassName('qoordinet_table');
     if (tables.length === 0) {
-        console.error('Table elements with the class "csv_table" not found');
+        console.error('Table elements with the class "qoordinet_table" not found');
         return;
     }
 
-    var table = tables[0]; // Assuming you want to work with the first table with class "csv_table"
+    var table = tables[0]; // Assuming you want to work with the first table with class "qoordinet_table"
     var isDragging = false;
     var startCell = { row: null, col: null };
     var currentCell = { row: null, col: null };
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.addEventListener('click', function(e) {
-        if (e.target.closest('.csv_table') === null) {
+        if (e.target.closest('.qoordinet_table') === null) {
             clearSelection();
         }
     });
