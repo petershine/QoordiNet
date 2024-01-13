@@ -25,11 +25,23 @@ async function uploadFile(formId, endpointUrl) {
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
-        } else {
-            console.log('(begin .json()...)')
+        }
+
+        // Check the response type
+        const contentType = response.headers.get("content-type");
+
+        if (contentType && contentType.includes("application/json")) {
+            // Handle JSON response
             const result = await response.json();
-            console.log('Success:', result);
-            // Handle success - e.g., display a success message
+            console.log('JSON Response:', result);
+        } else if (response.redirected) {
+            // Handle redirection
+            console.log('Redirected to:', response.url);
+            // You may want to follow the redirect or take other actions here
+        } else {
+            // Handle other content types (e.g., text)
+            const textResult = await response.text();
+            console.log('Text Response:', textResult);
         }
     } catch (error) {
         console.error('Error:', error);
