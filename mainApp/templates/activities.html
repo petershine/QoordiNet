@@ -8,6 +8,10 @@
 </head>
 
 <body>
+    <div id="loadingSpinner" style="display:none;">
+        <div class="spinner"></div>
+    </div>
+
     <table class="qoordinet_table">
         <thead>
             <tr>
@@ -25,6 +29,7 @@
     <script>
         async function fetchAndDisplayData() {
             try {
+                showSpinner()
                 const response = await fetch('/activities');
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -45,7 +50,17 @@
                 });
             } catch (error) {
                 console.error('Fetch error:', error);
+            } finally {
+                hideSpinner()
             }
+        }
+
+        function showSpinner() {
+            document.getElementById('loadingSpinner').style.display = 'block';
+        }
+
+        function hideSpinner() {
+            document.getElementById('loadingSpinner').style.display = 'none';
         }
 
         fetchAndDisplayData();
