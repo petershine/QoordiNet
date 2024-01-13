@@ -6,21 +6,27 @@ document.getElementById('build_database_submit').addEventListener('click', funct
 });
 
 async function uploadFile(formId, endpointUrl) {
+    console.log('formId', formId)
+    console.log('endpointUrl', endpointUrl)
+
     const form = document.getElementById(formId);
     const formData = new FormData(form);
     const fileField = form.querySelector('input[type="file"]');
 
     formData.append('csv_file', fileField.files[0]);
+    console.log('formData', formData)
 
     try {
         const response = await fetch(endpointUrl, {
             method: 'POST',
             body: formData
         });
+        console.log('response', response)
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         } else {
+            console.log('(begin .json()...)')
             const result = await response.json();
             console.log('Success:', result);
             // Handle success - e.g., display a success message
