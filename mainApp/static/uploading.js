@@ -17,6 +17,7 @@ async function uploadFile(formId, endpointUrl) {
     console.log('formData', formData)
 
     try {
+        showSpinner()
         const response = await fetch(endpointUrl, {
             method: 'POST',
             body: formData,
@@ -35,7 +36,7 @@ async function uploadFile(formId, endpointUrl) {
             return
         }
 
-        
+
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
             const result = await response.json();
@@ -46,5 +47,7 @@ async function uploadFile(formId, endpointUrl) {
         }
     } catch (error) {
         console.error('Error:', error);
+    } finally {
+        hideSpinner()
     }
 }

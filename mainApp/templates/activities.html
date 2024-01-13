@@ -24,7 +24,7 @@
         </tbody>
     </table>
 
-
+    <script src="/static/common.js"></script>
     <script src="/static/selectTableCells.js" defer></script>
     <script>
         async function fetchAndDisplayData() {
@@ -53,14 +53,6 @@
             } finally {
                 hideSpinner()
             }
-        }
-
-        function showSpinner() {
-            document.getElementById('loadingSpinner').style.display = 'flex';
-        }
-
-        function hideSpinner() {
-            document.getElementById('loadingSpinner').style.display = 'none';
         }
 
         fetchAndDisplayData();

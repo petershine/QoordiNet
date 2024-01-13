@@ -5,6 +5,10 @@
     <link rel="stylesheet" type="text/css" href="/static/style.css">
 </head>
 <body class="page-multi-forms">
+    <div id="loadingSpinner" style="display:none;">
+        <div class="spinner"></div>
+    </div>
+
     <div class="form-container">
     <h2>Process CSV</h2>
     <form action="/display_csv" enctype="multipart/form-data" method="post">
@@ -53,6 +57,7 @@
         }
     </script>
 
+    <script src="/static/common.js"></script>
     <script src="/static/uploading.js"></script>
 </body>
 </html>
