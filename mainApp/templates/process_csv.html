@@ -11,7 +11,7 @@
         <input type="hidden" name="shouldDisplayRaw" id="shouldDisplayRaw" value="false">
         <input type="hidden" name="shouldSaveIntoDatabase" id="shouldSaveIntoDatabase" value="false">
         
-        <input type="file" id="file-upload-0" name="csv_file" style="display: none;" onchange="updateFileName(this)" file-name-span-id="file-name-0">
+        <input type="file" id="file-upload-0" name="csv_file" style="display: none;" onchange="revealFileName(this)" file-name-span-id="file-name-0">
         <label for="file-upload-0" class="file-upload-button">OPEN CSV FILE</label>
         <span id="file-name-0"></span>
         
@@ -23,13 +23,12 @@
 
     <div class="form-container">
     <h2>(Re)Build Database</h2>
-    <form action="/build_database" enctype="multipart/form-data" method="post">
-        
-        <input type="file" id="file-upload-1" name="csv_file" style="display: none;" onchange="updateFileName(this)" file-name-span-id="file-name-1">
+    <form id="build_database" data-endpoint="/build_database" enctype="multipart/form-data" method="post">
+        <input type="file" id="file-upload-1" name="csv_file" style="display: none;" onchange="revealFileName(this)" file-name-span-id="file-name-1">
         <label for="file-upload-1" class="file-upload-button">OPEN CSV FILE</label>
         <span id="file-name-1"></span>
 
-        <button type="submit">(Re)Build</button>
+        <button id="build_database_submit" type="submit">(Re)Build</button>
     </form>
     </div>
 
@@ -42,7 +41,7 @@
     </div>
 
     <script>
-        function updateFileName(inputElement) {
+        function revealFileName(inputElement) {
             var fileNameSpanId = inputElement.getAttribute('file-name-span-id')
             var fileNameSpan = document.getElementById(fileNameSpanId);
 
@@ -53,5 +52,7 @@
             }
         }
     </script>
+
+    <script src="/static/uploading.js"></script>
 </body>
 </html>
