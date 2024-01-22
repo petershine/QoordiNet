@@ -42,7 +42,11 @@ echo -e "${TEMP_COLOR}$(rm -rvf ./mainApp/_temp_shared)${NC}"
 
 echo
 echo "[(Re)CREATE] container: \"$dockerContainerName\" from image: \"$dockerImageName\""
-docker create --name $dockerContainerName -v ~/fXDocker/_volume:$dockerMountedRoot -p $dockerPortNumber:$dockerPortNumber $dockerImageName
+docker create --name $dockerContainerName \
+    --restart always \
+    -v ~/fXDocker/_volume:$dockerMountedRoot \
+    -p $dockerPortNumber:$dockerPortNumber \
+    $dockerImageName
 
 
 echo
