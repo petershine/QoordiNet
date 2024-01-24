@@ -37,15 +37,31 @@
                 const jsonData = await response.json(); // This is your array of dictionaries
                 console.log(jsonData)
                 
-                // Get the first element with class 'qoordinet_table'
+
                 const table = document.getElementsByClassName('qoordinet_table')[0].getElementsByTagName('tbody')[0];
 
                 jsonData.forEach(item => {
                     const row = table.insertRow();
-                    // Assuming 'item' is a dictionary like { key1: 'value1', key2: 'value2', ... }
+
                     Object.values(item).forEach(text => {
                         const cell = row.insertCell();
-                        cell.textContent = text;
+                        
+                        try {
+                            const date = new Date(text);
+                            
+                            if (!isNaN(date.getTime())) {
+                                const formattedDate = date.toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: '2-digit',
+                                    day: '2-digit'
+                                });
+                                cell.textContent = formattedDate;
+                            } else {
+                                cell.textContent = text;
+                            }
+                        } catch (error) {
+                            cell.textContent = text;
+                        }
                     });
                 });
             } catch (error) {
