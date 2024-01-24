@@ -69,8 +69,7 @@ replacementHash = {'YOU SOLD OPENING TRANSACTION' : 'OPENING',
                    '\\(Cash\\)' : '',
                    }
 
-replacementDateColumnKey = 'Date'
-renamedColumnsHash = {runDateColumnKey : replacementDateColumnKey,
+renamedColumnsHash = {runDateColumnKey : 'Date',
                       symbolColumnKey : 'Ticker',
                       actionColumnKey : 'Note',
                       amountColumnKey : 'Activity',
@@ -91,10 +90,6 @@ class QoordiNetAppManager(BaseApp):
     def activities_list(self):
         loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
         loadedDf.fillna("", inplace=True)
-
-        loadedDf[replacementDateColumnKey] = pd.to_datetime(loadedDf[replacementDateColumnKey]).dt.date
-        loadedDf[replacementDateColumnKey] = loadedDf[replacementDateColumnKey].apply(lambda x: x.strftime('%Y-%m-%d') if not pd.isnull(x) else None)
-
         generated_list = loadedDf.to_dict(orient='records')
         return generated_list
         
