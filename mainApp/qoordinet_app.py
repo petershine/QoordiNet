@@ -92,8 +92,8 @@ class QoordiNetAppManager(BaseApp):
         loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
         loadedDf.fillna("", inplace=True)
 
-        loadedDf[replacementDateColumnKey] = pd.to_datetime(loadedDf[replacementDateColumnKey])
-        loadedDf[replacementDateColumnKey] = replacementDateColumnKey[replacementDateColumnKey].dt.strftime("%Y-%m-%d")
+        loadedDf[replacementDateColumnKey] = pd.to_datetime(loadedDf[replacementDateColumnKey]).dt.date
+        loadedDf[replacementDateColumnKey] = loadedDf[replacementDateColumnKey].apply(lambda x: x.strftime('%Y-%m-%d') if not pd.isnull(x) else None)
 
         generated_list = loadedDf.to_dict(orient='records')
         return generated_list
