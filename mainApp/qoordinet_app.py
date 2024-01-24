@@ -103,13 +103,7 @@ class QoordiNetAppManager(BaseApp):
         rows = tab_separated.strip().split("\n")
         processed_data = [row.split("\t") for row in rows]
         return processed_data
-    
-    def activities_table(self, styleClass: str):
-        loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
-        loadedDf.fillna("", inplace=True)
-        generated_html = loadedDf.to_html(classes=styleClass, index=False)    
-        return generated_html
-    
+        
 
     def html_table(self, csv_file, shouldDisplayRaw: bool, styleClass: str, numberOfDays: int):
         if shouldDisplayRaw is True:
