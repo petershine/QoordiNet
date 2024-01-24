@@ -43,19 +43,23 @@
                 jsonData.forEach(item => {
                     const row = table.insertRow();
 
-                    Object.values(item).forEach(text => {
+                    Object.values(item).forEach((text, index) => {
                         const cell = row.insertCell();
-                        
-                        try {
-                            const date = new Date(text);
-                            
-                            if (!isNaN(date.getTime())) {
-                                const formattedDate = date.toISOString().slice(0, 10);
-                                cell.textContent = formattedDate;
-                            } else {
+
+                        if (index == 0) {
+                            try {
+                                const date = new Date(text);
+
+                                if (!isNaN(date.getTime())) {
+                                    const formattedDate = date.toISOString().slice(0, 10);
+                                    cell.textContent = formattedDate;
+                                } else {
+                                    cell.textContent = text;
+                                }
+                            } catch (error) {
                                 cell.textContent = text;
                             }
-                        } catch (error) {
+                        } else {
                             cell.textContent = text;
                         }
                     });
