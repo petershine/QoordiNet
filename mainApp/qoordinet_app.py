@@ -106,7 +106,7 @@ class QoordiNetAppManager(BaseApp):
             return df.to_html(classes=styleClass)
         
         df = pd.read_csv(csv_file.file, skiprows=4, header=0)
-        df = self.revisedDataFrame(df, numberOfDays)
+        df = self.revisedDataFrame(df, 7)   #numberOfDays)
         df.fillna("", inplace=True)
         generated_html = df.to_html(classes=styleClass, index=False)
 
