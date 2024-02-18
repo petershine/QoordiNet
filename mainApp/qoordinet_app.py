@@ -145,7 +145,7 @@ class QoordiNetAppManager(BaseApp):
 
 
         is_option = df[actionColumnKey].str.contains('CALL|PUT', regex=True, case=False)
-        is_option_not_assigned = (is_option and not(df[actionColumnKey].str.contains('SOLD ASSIGNED|BOUGHT ASSIGNED', regex=True, case=False)))
+        is_option_not_assigned = is_option & ~(df[actionColumnKey].str.contains('SOLD ASSIGNED|BOUGHT ASSIGNED', regex=True, case=False))
         df.loc[is_option, typeColumnKey] = 'OPTION'
 
         df.loc[is_option_not_assigned, premiumColumnKey] = df.loc[is_option_not_assigned, amountColumnKey]
