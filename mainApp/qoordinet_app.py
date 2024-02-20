@@ -145,13 +145,14 @@ class QoordiNetAppManager(BaseApp):
 
 
         is_option = df[actionColumnKey].str.contains('CALL|PUT', regex=True, case=False)
-        is_option_not_assigned = is_option & ~(df[actionColumnKey].str.contains('SOLD ASSIGNED|BOUGHT ASSIGNED', regex=True, case=False))
         df.loc[is_option, typeColumnKey] = 'OPTION'
-
+        
+        is_option_not_assigned = is_option & ~(df[actionColumnKey].str.contains('ASSIGNED', regex=True, case=False))
         df.loc[is_option_not_assigned, premiumColumnKey] = df.loc[is_option_not_assigned, amountColumnKey]
         df.loc[is_option_not_assigned, amountColumnKey] = None
         df.loc[is_option_not_assigned, quantityColumnKey] = None
-        df.loc[is_option_not_assigned, aux_tickerColumnKey] = df.loc[is_option_not_assigned, symbolColumnKey].str.extract(r'-([A-Z]+)').fillna('')
+        
+        df[aux_tickerColumnKey] = df[symbolColumnKey].str.extract(r'-([A-Z]+)').fillna('')
         df.loc[is_option_not_assigned, symbolColumnKey] = df.loc[is_option_not_assigned, aux_tickerColumnKey]
             
     
@@ -164,7 +165,7 @@ class QoordiNetAppManager(BaseApp):
         is_other_transactions = df[actionColumnKey].str.contains('DEBIT|DEPOSIT|Transfer|CASH CONTRIBUTION|FEE', regex=True, case=False)
         df.loc[is_other_transactions, quantityColumnKey] = None
 
-        is_invested = (df[amountColumnKey].isna() == False) & (df[quantityColumnKey].isna() == False)
+        is_invested = ~is_option & (df[amountColumnKey].isna() == False) & (df[quantityColumnKey].isna() == False)
         df.loc[is_invested, typeColumnKey] = 'Invested'
 
         df[aux_debitColumnKey] = is_other_transactions
