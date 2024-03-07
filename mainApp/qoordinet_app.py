@@ -11,12 +11,18 @@ droppedColumnKeys = ['Exchange Quantity',
                      'Settlement Date',
                      'Currency',
                      'Accrued Interest',
-                     'Security Description',
-                     'Security Type',
                      'Price',
                      'Commission',
                      'Fees',
                      ]
+
+droppedColumnKeys_olderBefore20240307 = ['Security Description',
+                                         'Security Type',
+                                        ]
+
+droppedColumnKeys_newerSince20240307 = ['Description',
+                                        'Type',
+                                        ]
 
 runDateColumnKey = 'Run Date'
 accountColumnKey = 'Account'
@@ -128,7 +134,18 @@ class QoordiNetAppManager(BaseApp):
 
 
     def revisedDataFrame(self, df: DataFrame, numberOfDays: int):
-        df = df.drop(columns=droppedColumnKeys)
+        columnDroppedDF = df
+        columnDroppedDF = columnDroppedDF.drop(columns=droppedColumnKeys)
+        try:
+            columnDroppedDF = columnDroppedDF.drop(columns=droppedColumnKeys_olderBefore20240307)
+        except KeyError:
+            try:
+                columnDroppedDF = columnDroppedDF.drop(columns=droppedColumnKeys_newerSince20240307)
+            except KeyError:
+                pass
+
+        df = columnDroppedDF
+        
 
         runDateKeyMask = df[runDateColumnKey].apply(self.is_date)
         actionKeyMask = df[actionColumnKey].apply(self.without_substring)
