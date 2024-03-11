@@ -111,7 +111,7 @@ class QoordiNetAppManager(BaseApp):
             df = pd.read_csv(csv_file.file, header=0)
             return df.to_html(classes=styleClass)
         
-        df = pd.read_csv(csv_file.file, skiprows=4, header=0)
+        df = pd.read_csv(csv_file.file, skiprows=2, header=0)
         df = self.revisedDataFrame(df, 7)   #numberOfDays)
         df.fillna("", inplace=True)
         generated_html = df.to_html(classes=styleClass, index=False)
@@ -120,7 +120,7 @@ class QoordiNetAppManager(BaseApp):
 
     
     def save_into_database(self, csv_file, styleClass: str, numberOfDays: int):
-        df = pd.read_csv(csv_file.file, skiprows=4, header=0)
+        df = pd.read_csv(csv_file.file, skiprows=2, header=0)
         df = self.revisedDataFrame(df, numberOfDays)
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
