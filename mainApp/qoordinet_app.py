@@ -191,7 +191,10 @@ class QoordiNetAppManager(BaseApp):
         df = df.sort_values(by=sortingPriorityColumns, ascending=False)
 
         df = df.drop(columns=droppableAuxColumns)
-        df = df.replace(replacementHash, regex=True)
+        
+        if not df.filter(replacementHash, regex=True).empty:
+            df = df.replace(replacementHash, regex=True)
+                        
         df.loc[(~is_option & ~is_other_transactions), actionColumnKey] = ''
         
         latest_dates = df[runDateColumnKey].drop_duplicates().nlargest(numberOfDays)
