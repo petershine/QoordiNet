@@ -207,7 +207,8 @@ class QoordiNetAppManager(BaseApp):
                         
         df.loc[(~is_option & ~is_other_transactions), actionColumnKey] = ''
         
-        latest_dates = df[runDateColumnKey].drop_duplicates().nlargest(numberOfDays)
+        df[runDateColumnKey] = pd.to_numeric(df[runDateColumnKey].drop_duplicates())
+        latest_dates = df[runDateColumnKey].nlargest(numberOfDays)
         selected_rows = df[df[runDateColumnKey].isin(latest_dates)]
         df = selected_rows
         
