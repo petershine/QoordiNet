@@ -203,8 +203,7 @@ class QoordiNetAppManager(BaseApp):
 
         df = df.drop(columns=droppableAuxColumns)
         
-        if not df.filter(replacementHash, regex=True).empty:
-            df = df.replace(replacementHash, regex=True)
+        df = df.replace(replacementHash, regex=True)
                         
         df.loc[(~is_option & ~is_other_transactions), actionColumnKey] = ''
         
