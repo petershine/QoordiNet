@@ -212,6 +212,10 @@ class QoordiNetAppManager(BaseApp):
             pd.to_datetime(value)
             return True
         except ValueError:
+            try:
+                pd.to_datetime(value, format='%b-%m-%Y')
+            except:
+                return False
             return False
         
     def is_not_zero(self, value: str):
