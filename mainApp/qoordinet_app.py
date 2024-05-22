@@ -186,7 +186,18 @@ class QoordiNetAppManager(BaseApp):
         df.loc[is_invested, typeColumnKey] = 'Invested'
 
         df[aux_debitColumnKey] = is_other_transactions
-        df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey])
+
+        try:
+            df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey])
+        except ValueError:
+            try:
+                df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey], format='%b-%d-%Y')
+            except ValueError:
+                pass
+            
+            pass
+
+        
 
         df = df.sort_values(by=sortingPriorityColumns, ascending=False)
 
@@ -208,16 +219,21 @@ class QoordiNetAppManager(BaseApp):
     
 
     def is_date(self, value: str):
+        self.logger.info(f"[1.value {value}]")
         try:
             pd.to_datetime(value)
+            self.logger.info(f"[1.value {True}]")
             return True
         except ValueError:
+            self.logger.info(f"[2.value {value}]")
             try:
-                pd.to_datetime(value, format='%b-%m-%Y')
+                pd.to_datetime(value, format='%b-%d-%Y')
+                self.logger.info(f"[2.value {True}]")
                 return True
             
             except ValueError:
                 return False
+
             return False
         
     def is_not_zero(self, value: str):
