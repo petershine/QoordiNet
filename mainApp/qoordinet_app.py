@@ -214,7 +214,9 @@ class QoordiNetAppManager(BaseApp):
         except ValueError:
             try:
                 pd.to_datetime(value, format='%b-%m-%Y')
-            except:
+                return True
+            
+            except ValueError:
                 return False
             return False
         
