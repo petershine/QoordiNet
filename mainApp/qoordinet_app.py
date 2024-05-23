@@ -219,22 +219,19 @@ class QoordiNetAppManager(BaseApp):
     
 
     def is_date(self, value: str):
-        self.logger.info(f"[1.value {value}]")
         try:
             pd.to_datetime(value)
-            self.logger.info(f"[1.value {True}]")
             return True
+        
         except ValueError:
-            self.logger.info(f"[2.value {value}]")
             try:
                 pd.to_datetime(value, format='%b-%d-%Y')
-                self.logger.info(f"[2.value {True}]")
                 return True
             
             except ValueError:
+                self.logger.info(f"[is_date: {value} {False}]")
                 return False
 
-            return False
         
     def is_not_zero(self, value: str):
         try:
