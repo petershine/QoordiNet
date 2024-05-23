@@ -187,17 +187,21 @@ class QoordiNetAppManager(BaseApp):
 
         df[aux_debitColumnKey] = is_other_transactions
 
+
         try:
-            df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey])
+            df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey].str.strip()).dt.strftime('%m/%d/%Y')
         except ValueError:
             try:
-                df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey], format='%b-%d-%Y')
+                df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey].str.strip(), format='%b-%d-%Y').dt.strftime('%m/%d/%Y')
             except ValueError:
+                self.logger.info(f"to_datetime, reformatting failed")
                 pass
             
             pass
 
+        self.logger.info(f"df[{runDateColumnKey}]: {df[runDateColumnKey]}")
         
+
 
         df = df.sort_values(by=sortingPriorityColumns, ascending=False)
 
@@ -207,7 +211,6 @@ class QoordiNetAppManager(BaseApp):
                         
         df.loc[(~is_option & ~is_other_transactions), actionColumnKey] = ''
         
-        df[runDateColumnKey] = pd.to_numeric(df[runDateColumnKey].drop_duplicates())
         latest_dates = df[runDateColumnKey].nlargest(numberOfDays)
         selected_rows = df[df[runDateColumnKey].isin(latest_dates)]
         df = selected_rows
@@ -229,7 +232,7 @@ class QoordiNetAppManager(BaseApp):
                 return True
             
             except ValueError:
-                self.logger.info(f"[is_date: {value} {False}]")
+                self.logger.info(f"is_date: {False} : {value}")
                 return False
 
         
