@@ -199,6 +199,7 @@ class QoordiNetAppManager(BaseApp):
             
             pass
 
+        df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey]) #re-transform back to datetype
         self.logger.info(f"df[{runDateColumnKey}]: {df[runDateColumnKey]}")
         
 
