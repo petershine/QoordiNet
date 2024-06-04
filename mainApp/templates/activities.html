@@ -12,7 +12,7 @@
         <div class="spinner"></div>
     </div>
 
-    <table id="activities_table" class="qoordinet_table">
+    <table class="qoordinet_table">
         <thead>
             <tr>
                 <!-- Table Headers -->
@@ -28,8 +28,7 @@
     <script src="/static/selectTableCells.js" defer></script>
     <script>
         function scrollToBottom() {
-            let scrollableDiv = document.getElementById("activities_table");
-            scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
+            document.body.scrollTop = document.body.scrollHeight;
         }
     </script>
     <script>
