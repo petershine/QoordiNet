@@ -12,7 +12,7 @@
         <div class="spinner"></div>
     </div>
 
-    <table class="qoordinet_table">
+    <table id="activities_table" class="qoordinet_table">
         <thead>
             <tr>
                 <!-- Table Headers -->
@@ -26,6 +26,12 @@
 
     <script src="/static/common.js"></script>
     <script src="/static/selectTableCells.js" defer></script>
+    <script>
+        function scrollToBottom() {
+            let scrollableDiv = document.getElementById("activities_table");
+            scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
+        }
+    </script>
     <script>
         async function fetchAndDisplayData() {
             try {
@@ -68,6 +74,8 @@
                 console.error('Fetch error:', error);
             } finally {
                 hideSpinner()
+
+                scrollToBottom()
             }
         }
 
