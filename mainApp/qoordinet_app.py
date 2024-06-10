@@ -150,9 +150,11 @@ class QoordiNetAppManager(BaseApp):
         runDateKeyMask = df[runDateColumnKey].apply(self.is_date)
         actionKeyMask = df[actionColumnKey].apply(self.without_substring)
         amountKeyMask = df[amountColumnKey].apply(self.is_not_zero)
+        quantityKeyMask = df[quantityColumnKey].apply(self.is_not_zero)
+
         df = df[runDateKeyMask]
         df = df[actionKeyMask]
-        df = df[amountKeyMask]
+        df = df[amountKeyMask & quantityKeyMask]
 
     
         df[typeColumnKey] = ''
@@ -239,8 +241,7 @@ class QoordiNetAppManager(BaseApp):
         
     def is_not_zero(self, value: str):
         try:
-            amount = float(value)
-            return (amount != 0.0)
+            return (float(value) != 0.0)
         except ValueError:
             return True
         
