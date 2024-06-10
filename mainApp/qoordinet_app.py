@@ -154,7 +154,7 @@ class QoordiNetAppManager(BaseApp):
 
         df = df[runDateKeyMask]
         df = df[actionKeyMask]
-        df = df[amountKeyMask or quantityKeyMask]
+        df = df[amountKeyMask | quantityKeyMask]
 
     
         df[typeColumnKey] = ''
