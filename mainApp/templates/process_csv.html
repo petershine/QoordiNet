@@ -11,17 +11,21 @@
 
     <div class="form-container">
     <h2>Process CSV</h2>
-    <form action="/display_csv" enctype="multipart/form-data" method="post">
+    <!-- <form action="/display_csv" enctype="multipart/form-data" method="post">
+        <input type="file" id="file-upload-0" name="csv_file" style="display: none;" onchange="revealFileName(this)" file-name-span-id="file-name-0">
+        <label for="file-upload-0" class="file-upload-button">OPEN CSV FILE</label>
+        <span id="file-name-0"></span>
+
         <input type="hidden" name="shouldDisplayRaw" id="shouldDisplayRaw" value="false">
-        <input type="hidden" name="shouldSaveIntoDatabase" id="shouldSaveIntoDatabase" value="false">
-        
+        <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='false';">Process Fidelity CSV</button>
+        <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='true';">Display raw CSV</button>
+    </form> -->
+    <form action="/save_into_database" enctype="multipart/form-data" method="post">
         <input type="file" id="file-upload-0" name="csv_file" style="display: none;" onchange="revealFileName(this)" file-name-span-id="file-name-0">
         <label for="file-upload-0" class="file-upload-button">OPEN CSV FILE</label>
         <span id="file-name-0"></span>
         
-        <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='false';">Process Fidelity CSV</button>
-        <button type="submit" onclick="document.getElementById('shouldSaveIntoDatabase').value='true';">Save into Database</button>
-        <button type="submit" onclick="document.getElementById('shouldDisplayRaw').value='true';">Display raw CSV</button>
+        <button type="submit">Save into Database</button>
     </form>
     </div>
 
