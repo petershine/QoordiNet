@@ -18,11 +18,16 @@ app.mount("/static", StaticFiles(directory=app_constants.HTML_STATIC_DIRECTORY),
 
 @app.get("/")
 def read_root(request: Request):
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_ACTIVITIES, {"request": request})
+    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_INDEX, {"request": request})
 
-@app.get("/_new", response_class=HTMLResponse)
-def page_new(request: Request):
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_NEW, {"request": request})
+
+@app.get("/process_csv", response_class=HTMLResponse)
+def read_process_csv(request: Request):
+    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_PROCESS_CSV, {"request": request})
+
+@app.get("/activities_table", response_class=HTMLResponse)
+def page_activities_table(request: Request):
+    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_ACTIVITIES, {"request": request})
 
 
 @app.get("/activities")
@@ -30,24 +35,27 @@ def get_activities(request: Request, response_class=JSONResponse):
     json_activities = webAppManager.activities_list()
     return json_activities
 
-@app.get("/process_csv", response_class=HTMLResponse)
-def read_process_csv(request: Request):
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_PROCESS_CSV, {"request": request})
-
-
 @app.post("/display_csv")
-async def display_csv(request: Request, csv_file: UploadFile = File(...), shouldDisplayRaw: bool = Form(False), shouldSaveIntoDatabase: bool = Form(False), numberOfDays: int = Form(1)):
-    if shouldSaveIntoDatabase:
-        webAppManager.save_into_database(csv_file=csv_file, styleClass="qoordinet_table", numberOfDays=numberOfDays)
-        return RedirectResponse(url="/", status_code=303)
-        
+async def display_csv(request: Request, csv_file: UploadFile = File(...), shouldDisplayRaw: bool = Form(False), numberOfDays: int = Form(1)):        
     html_csv_table = webAppManager.html_table(csv_file=csv_file, shouldDisplayRaw=shouldDisplayRaw, styleClass="qoordinet_table", numberOfDays=numberOfDays)
     return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_CSV, {"request": request, "html_table": html_csv_table})
-    
+
+@app.post("/save_into_database", response_class=RedirectResponse)
+async def save_into_database(request: Request, csv_file: UploadFile = File(...), numberOfDays: int = Form(1)):
+    webAppManager.save_into_database(csv_file=csv_file, styleClass="qoordinet_table", numberOfDays=numberOfDays)
+    return RedirectResponse(url="/", status_code=303)
+
 @app.post("/build_database", response_class=RedirectResponse)
 async def build_database(request: Request, csv_file: UploadFile = File(...)):
     webAppManager.build_database(csv_file=csv_file, styleClass="qoordinet_table")
     return RedirectResponse(url="/", status_code=303)
+
+
+@app.get("/_new", response_class=HTMLResponse)
+def page_new(request: Request):
+    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_NEW, {"request": request})
+
+
 
 
 @app.post("/display_tsv", response_class=HTMLResponse)
