@@ -60,15 +60,8 @@
 
     <script>
         function scrollToBottom() {
-            // setTimeout(() => {
-                const contentArea = document.querySelector('.content-area');
-                const table = contentArea.querySelector('.qoordinet_table');
-                if (table) {
-                    contentArea.scrollTop = table.scrollHeight;
-                } else {
-                    console.error("Table not found in content area!");
-                }
-            // }, 100);
+            const contentArea = document.querySelector('.content-area');
+            contentArea.scrollTop = contentArea.scrollHeight;
         }
 
         fetchAndDisplayData();
