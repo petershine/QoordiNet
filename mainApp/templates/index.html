@@ -12,18 +12,13 @@
             flex-direction: row;
         }
 
-        .top-area {
-            background-color: lightskyblue;
-            padding: 10px;
+        .content-area {
+            flex: 1;
+            overflow-y: scroll;
         }
 
         .vertical-area {
             flex: 0.25;
-        }
-
-        .content-area {
-            flex: 1;
-            overflow-y: scroll;
         }
     </style>
 </head>
@@ -35,7 +30,6 @@
 
     <div class="container">
         <div class="content-area">
-
             <table class="qoordinet_table">
                 <thead>
                     <tr>
@@ -55,9 +49,8 @@
 
 
     <script src="/static/common.js"></script>
-    <script src="/static/selectTableCells.js"></script>
     <script src="/static/embedContent.js"></script>
-
+    <script src="/static/fetchAndDisplay.js"></script>
     <script>
         function scrollToBottom() {
             const contentArea = document.querySelector('.content-area');
@@ -65,6 +58,8 @@
         }
 
         embedContent('/process_csv', 'vertical-content')
+
+        fetchAndDisplayData();
     </script>
 </body>
 
