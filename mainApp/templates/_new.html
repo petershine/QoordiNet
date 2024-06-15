@@ -49,33 +49,22 @@
             </table>
         </div>
         <div class="vertical-area">
-            <div id="embedded-content"></div>
+            <div id="vertical-content"></div>
         </div>
     </div>
 
 
     <script src="/static/common.js"></script>
-    <script src="/static/selectTableCells.js" defer></script>
-    <script src="/static/fetchAndDisplay.js"></script>
+    <script src="/static/selectTableCells.js"></script>
+    <script src="/static/embedContent.js"></script>
 
     <script>
-        const embeddedContent = document.getElementById('embedded-content');
-
-        fetch('/process_csv') // Replace with your actual file path
-            .then(response => response.text())
-            .then(html => {
-                embeddedContent.innerHTML = html;
-            })
-            .catch(error => {
-                console.error('Error fetching embedded content:', error);
-            });
-
         function scrollToBottom() {
             const contentArea = document.querySelector('.content-area');
             contentArea.scrollTop = contentArea.scrollHeight;
         }
 
-        fetchAndDisplayData();
+        embedContent('/process_csv', 'vertical-content')
     </script>
 </body>
 
