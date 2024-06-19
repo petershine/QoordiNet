@@ -11,7 +11,7 @@ HTML_TEMPLATE_DIRECTORY = "mainApp/templates"
 HTML_TEMPLATE_NEW = "_new.html"
 HTML_TEMPLATE_INDEX = "index.html"
 HTML_TEMPLATE_ACTIVITIES = "activities.html"
-HTML_TEMPLATE_PROCESS_CSV = "process_csv.html"
+HTML_TEMPLATE_PROCESS = "process.html"
 HTML_TEMPLATE_DISPLAY_CSV = "display_csv.html"
 HTML_TEMPLATE_DISPLAY_TSV = "display_tsv.html"
 

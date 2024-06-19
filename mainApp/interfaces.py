@@ -21,9 +21,9 @@ def read_root(request: Request):
     return templates.TemplateResponse(app_constants.HTML_TEMPLATE_INDEX, {"request": request})
 
 
-@app.get("/process_csv", response_class=HTMLResponse)
-def read_process_csv(request: Request):
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_PROCESS_CSV, {"request": request})
+@app.get("/process", response_class=HTMLResponse)
+def read_process(request: Request):
+    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_PROCESS, {"request": request})
 
 @app.get("/activities_table", response_class=HTMLResponse)
 def page_activities_table(request: Request):
