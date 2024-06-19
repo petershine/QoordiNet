@@ -30,34 +30,38 @@
 
     <div class="container">
         <div class="content-area">
-            <table class="qoordinet_table">
-                <thead>
-                    <tr>
-                        <!-- Table Headers -->
-                        <!-- Example: <th>Name</th><th>Age</th> -->
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Data rows will be inserted here -->
-                </tbody>
-            </table>
+            <div id="main-content"></div>>
         </div>
         <div class="vertical-area">
             <div id="vertical-content"></div>
         </div>
     </div>
 
-
     <script src="/static/common.js"></script>
     <script src="/static/embedContent.js"></script>
     <script src="/static/fetchAndDisplay.js"></script>
+
+    <script src="/static/selectTableCells.js"></script>
+
     <script>
         function scrollToBottom() {
             const contentArea = document.querySelector('.content-area');
             contentArea.scrollTop = contentArea.scrollHeight;
         }
 
+        function revealFileName(inputElement) {
+            var fileNameSpanId = inputElement.getAttribute('file-name-span-id')
+            var fileNameSpan = document.getElementById(fileNameSpanId);
+
+            if (inputElement.files && inputElement.files.length > 0) {
+                fileNameSpan.textContent = inputElement.files[0].name;
+            } else {
+                fileNameSpan.textContent = '';
+            }
+        }
+
         embedContent('/process_csv', 'vertical-content')
+        embedContent('/activities_table', 'main-content')
 
         fetchAndDisplayData();
     </script>
