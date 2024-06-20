@@ -175,7 +175,7 @@ class QoordiNetAppManager(BaseApp):
         df.loc[is_option_not_assigned, symbolColumnKey] = df.loc[is_option_not_assigned, aux_tickerColumnKey]
             
     
-        is_dividend = (df[actionColumnKey].str.contains('DIVIDEND', case=False))
+        is_dividend = (df[actionColumnKey].str.contains('DIVIDEND', case=False)) & (df[quantityColumnKey] == 0)
         df.loc[is_dividend, typeColumnKey] = 'dividend'
         df.loc[is_dividend, dividendColumnKey] = df.loc[is_dividend, amountColumnKey]
         df.loc[is_dividend, amountColumnKey] = None
