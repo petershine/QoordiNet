@@ -30,7 +30,17 @@
 
     <div class="container">
         <div class="content-area">
-            <div id="main-content"></div>>
+            <table class="qoordinet_table">
+                <thead>
+                    <tr>
+                        <!-- Table Headers -->
+                        <!-- Example: <th>Name</th><th>Age</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data rows will be inserted here -->
+                </tbody>
+            </table>
         </div>
         <div class="vertical-area">
             <div id="vertical-content"></div>
@@ -61,7 +71,6 @@
         }
 
         embedContent('/process', 'vertical-content')
-        embedContent('/activities_table', 'main-content')
 
         fetchAndDisplayData();
     </script>
