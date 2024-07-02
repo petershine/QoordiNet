@@ -95,7 +95,7 @@ class QoordiNetAppManager(BaseApp):
 
     def activities_list(self):
         loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
-        loadedDf.fillna("", inplace=True)
+        loadedDf.fillna(None, inplace=True)
         generated_list = loadedDf.to_dict(orient='records')
         return generated_list
         
@@ -113,7 +113,7 @@ class QoordiNetAppManager(BaseApp):
         
         df = pd.read_csv(csv_file.file, skiprows=2, header=0)
         df = self.revisedDataFrame(df, 7)   #numberOfDays)
-        df.fillna("", inplace=True)
+        df.fillna(None, inplace=True)
         generated_html = df.to_html(classes=styleClass, index=False)
 
         return generated_html
