@@ -206,7 +206,7 @@ class QoordiNetAppManager(BaseApp):
         
 
 
-        df = df.sort_values(by=sortingPriorityColumns, ascending=False)
+        df = df.sort_values(by=sortingPriorityColumns, ascending=True)
 
         df = df.drop(columns=droppableAuxColumns)
         
