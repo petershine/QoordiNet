@@ -106,7 +106,7 @@ class QoordiNetAppManager(BaseApp):
         return processed_data
         
 
-    def html_table(self, csv_file, shouldDisplayRaw: bool, styleClass: str, numberOfDays: int):
+    def html_table(self, csv_file, shouldDisplayRaw: bool, styleClass: str):
         if shouldDisplayRaw is True:
             df = pd.read_csv(csv_file.file, header=0)
             return df.to_html(classes=styleClass)
@@ -119,9 +119,9 @@ class QoordiNetAppManager(BaseApp):
         return generated_html
 
     
-    def save_into_database(self, csv_file, styleClass: str, numberOfDays: int):
+    def save_into_database(self, csv_file, styleClass: str):
         df = pd.read_csv(csv_file.file, skiprows=2, header=0)
-        df = self.revisedDataFrame(df, numberOfDays)
+        df = self.revisedDataFrame(df, 7)   #numberOfDays)
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
     

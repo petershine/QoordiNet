@@ -36,13 +36,13 @@ def get_activities(request: Request, response_class=JSONResponse):
     return json_activities
 
 @app.post("/display_csv")
-async def display_csv(request: Request, csv_file: UploadFile = File(...), shouldDisplayRaw: bool = Form(False), numberOfDays: int = Form(1)):        
-    html_csv_table = webAppManager.html_table(csv_file=csv_file, shouldDisplayRaw=shouldDisplayRaw, styleClass="qoordinet_table", numberOfDays=numberOfDays)
+async def display_csv(request: Request, csv_file: UploadFile = File(...), shouldDisplayRaw: bool = Form(False)):        
+    html_csv_table = webAppManager.html_table(csv_file=csv_file, shouldDisplayRaw=shouldDisplayRaw, styleClass="qoordinet_table")
     return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_CSV, {"request": request, "html_table": html_csv_table})
 
 @app.post("/save_into_database", response_class=RedirectResponse)
-async def save_into_database(request: Request, csv_file: UploadFile = File(...), numberOfDays: int = Form(1)):
-    webAppManager.save_into_database(csv_file=csv_file, styleClass="qoordinet_table", numberOfDays=numberOfDays)
+async def save_into_database(request: Request, csv_file: UploadFile = File(...)):
+    webAppManager.save_into_database(csv_file=csv_file, styleClass="qoordinet_table")
     return RedirectResponse(url="/", status_code=303)
 
 @app.post("/build_database", response_class=RedirectResponse)
