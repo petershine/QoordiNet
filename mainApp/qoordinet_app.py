@@ -172,14 +172,14 @@ class QoordiNetAppManager(BaseApp):
 
         is_option = df[actionColumnKey].str.contains('CALL|PUT|CALLS|PUTS', regex=True, case=False)
         df.loc[is_option, typeColumnKey] = 'OPTION'
-        df[aux_tickerColumnKey] = df[symbolColumnKey].str.extract(r'-([A-Z]+)').fillna('')
-        df.loc[is_option, symbolColumnKey] = df.loc[is_option, aux_tickerColumnKey]
-
+        
         is_option_not_assigned = is_option & ~(df[actionColumnKey].str.contains('ASSIGNED', regex=True, case=False))
         df.loc[is_option_not_assigned, premiumColumnKey] = df.loc[is_option_not_assigned, amountColumnKey]
         df.loc[is_option_not_assigned, amountColumnKey] = None
         df.loc[is_option_not_assigned, quantityColumnKey] = None
         
+        df[aux_tickerColumnKey] = df[symbolColumnKey].str.extract(r'-([A-Z]+)').fillna('')
+        df.loc[is_option_not_assigned, symbolColumnKey] = df.loc[is_option_not_assigned, aux_tickerColumnKey]
             
     
         is_dividend = (df[actionColumnKey].str.contains('DIVIDEND', case=False)) & (df[quantityColumnKey] == 0)
