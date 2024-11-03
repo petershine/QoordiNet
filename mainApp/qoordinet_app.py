@@ -98,7 +98,7 @@ class QoordiNetAppManager(BaseApp):
 
     def activities_list(self):
         loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
-        loadedDf.fillna("", inplace=True)
+        loadedDf.fillna('', inplace=True)
 
         self.last_activity = pd.to_datetime(loadedDf.loc[loadedDf.index[-1]]['Date'])
         self.logger.info(f"last_activity: {self.last_activity}")
@@ -119,8 +119,8 @@ class QoordiNetAppManager(BaseApp):
             return df.to_html(classes=styleClass)
         
         df = pd.read_csv(csv_file.file, skiprows=2, header=0)
-        df.fillna("", inplace=True)
         df = self.revisedDataFrame(df)
+        df.fillna('', inplace=True)
         generated_html = df.to_html(classes=styleClass, index=False)
 
         return generated_html
