@@ -223,7 +223,8 @@ class QoordiNetAppManager(BaseApp):
         
 
         current_latest = df.loc[df.index[-1]]['Run Date']
-        numberOfDays = (current_latest - self.last_activity).days #7
+        numberOfDays = (current_latest - self.last_activity).days
+        numberOfDays = min(numberOfDays, 30)
         self.logger.info(f"current_latest: {current_latest}")
         self.logger.info(f"last_activity: {self.last_activity}")
         self.logger.info(f"numberOfDays: {numberOfDays}")
