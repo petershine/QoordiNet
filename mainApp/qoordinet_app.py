@@ -2,7 +2,7 @@ from . import app_constants
 from ._shared.managers.baseapp import BaseApp
 
 import pandas as pd
-from pandas import DataFrame
+from pandas import DataFrame, Timestamp
 
 
 droppedColumnKeys = ['Exchange Quantity',
@@ -85,6 +85,9 @@ renamedColumnsHash = {runDateColumnKey : 'Date',
 table_name = 'qoordinetActivities'
 
 class QoordiNetAppManager(BaseApp):
+    last_activity: Timestamp
+
+
     def __init__(self, appName, logFilePath):
         super().__init__(appName, logFilePath)
 
@@ -96,6 +99,10 @@ class QoordiNetAppManager(BaseApp):
     def activities_list(self):
         loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
         loadedDf.fillna("", inplace=True)
+
+        self.last_activity = pd.to_datetime(loadedDf.loc[loadedDf.index[-1]]['Date'])
+        self.logger.info(f"last_activity: {self.last_activity}")
+
         generated_list = loadedDf.to_dict(orient='records')
         return generated_list
         
