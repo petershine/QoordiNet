@@ -119,8 +119,8 @@ class QoordiNetAppManager(BaseApp):
             return df.to_html(classes=styleClass)
         
         df = pd.read_csv(csv_file.file, skiprows=2, header=0)
-        df = self.revisedDataFrame(df, 7)   #numberOfDays)
         df.fillna("", inplace=True)
+        df = self.revisedDataFrame(df)
         generated_html = df.to_html(classes=styleClass, index=False)
 
         return generated_html
@@ -128,7 +128,7 @@ class QoordiNetAppManager(BaseApp):
     
     def save_into_database(self, csv_file, styleClass: str):
         df = pd.read_csv(csv_file.file, skiprows=2, header=0)
-        df = self.revisedDataFrame(df, 7)   #numberOfDays)
+        df = self.revisedDataFrame(df)
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
     
@@ -140,7 +140,7 @@ class QoordiNetAppManager(BaseApp):
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
 
 
-    def revisedDataFrame(self, df: DataFrame, numberOfDays: int):
+    def revisedDataFrame(self, df: DataFrame):
         columnDroppedDF = df
         columnDroppedDF = columnDroppedDF.drop(columns=droppedColumnKeys)
         try:
@@ -221,6 +221,13 @@ class QoordiNetAppManager(BaseApp):
                         
         df.loc[(~is_option & ~is_other_transactions), actionColumnKey] = ''
         
+
+        current_latest = df.loc[df.index[-1]]['Run Date']
+        numberOfDays = (current_latest - self.last_activity).days #7
+        self.logger.info(f"current_latest: {current_latest}")
+        self.logger.info(f"last_activity: {self.last_activity}")
+        self.logger.info(f"numberOfDays: {numberOfDays}")
+
         latest_dates = df[runDateColumnKey].drop_duplicates().nlargest(numberOfDays)
         selected_rows = df[df[runDateColumnKey].isin(latest_dates)]
         df = selected_rows
