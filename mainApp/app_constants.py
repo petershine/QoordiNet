@@ -8,7 +8,6 @@ SQLITE_PATH = f"sqlite:///{constants.MOUNTED_ROOT}/{APP_NAME}.db"
 
 PORT_NUMBER = 50002
 HTML_TEMPLATE_DIRECTORY = "mainApp/templates"
-HTML_TEMPLATE_NEW = "_new.html"
 HTML_TEMPLATE_INDEX = "index.html"
 HTML_TEMPLATE_ACTIVITIES = "activities.html"
 HTML_TEMPLATE_PROCESS = "process.html"

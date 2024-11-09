@@ -51,9 +51,6 @@ async def build_database(request: Request, csv_file: UploadFile = File(...)):
     return RedirectResponse(url="/", status_code=303)
 
 
-@app.get("/_new", response_class=HTMLResponse)
-def page_new(request: Request):
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_NEW, {"request": request})
 
 
 
