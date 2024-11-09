@@ -140,6 +140,9 @@ class QoordiNetAppManager(BaseApp):
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
 
+    def delete_last(self, days: int | None = None):
+        selected_days = max((days or 0), 1)
+        self.logger.info(f"selected_days: {selected_days}")
 
     def revisedDataFrame(self, df: DataFrame):
         columnDroppedDF = df

@@ -51,6 +51,10 @@ async def build_database(request: Request, csv_file: UploadFile = File(...)):
     return RedirectResponse(url="/", status_code=303)
 
 
+@app.delete("/delete_last", response_class=RedirectResponse)
+async def delete_last(days: int | None = None):
+    webAppManager.delete_last(days=days)
+    return RedirectResponse(url="/", status_code=303)
 
 
 
