@@ -112,6 +112,10 @@ class QoordiNetAppManager(BaseApp):
     def delete_last(self, days: int | None = None):
         selected_days = max((days or 0), 1)
         self.logger.info(f"selected_days: {selected_days}")
+
+        if self.loadedDf is None:
+            self.activities_list
+            
         self.logger.info(f"self.loadedDf: {self.loadedDf}")
         
 
