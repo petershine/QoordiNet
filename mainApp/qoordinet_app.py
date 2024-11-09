@@ -117,7 +117,7 @@ class QoordiNetAppManager(BaseApp):
         selected_days = max((days or 0), 1)
         self.logger.info(f"selected_days: {selected_days}")
 
-        if self.loadedDf is None:
+        if self.loadedDf.empty:
             self.__loadDataFrame()
         
         
