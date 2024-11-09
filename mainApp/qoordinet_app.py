@@ -86,6 +86,7 @@ renamedColumnsHash = {runDateColumnKey : 'Date',
 table_name = 'qoordinetActivities'
 
 class QoordiNetAppManager(BaseApp):
+    loadedDf: DataFrame
     last_activity: Timestamp
 
 
@@ -98,14 +99,20 @@ class QoordiNetAppManager(BaseApp):
 
 
     def activities_list(self):
-        loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
-        loadedDf.fillna('', inplace=True)
+        self.loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
+        self.loadedDf.fillna('', inplace=True)
 
-        self.last_activity = pd.to_datetime(loadedDf.loc[loadedDf.index[-1]]['Date'])
+        self.last_activity = pd.to_datetime(self.loadedDf.loc[self.loadedDf.index[-1]]['Date'])
         self.logger.info(f"last_activity: {self.last_activity}")
 
-        generated_list = loadedDf.to_dict(orient='records')
+        generated_list = self.loadedDf.to_dict(orient='records')
         return generated_list
+    
+
+    def delete_last(self, days: int | None = None):
+        selected_days = max((days or 0), 1)
+        self.logger.info(f"selected_days: {selected_days}")
+        self.logger.info(f"self.loadedDf: {self.loadedDf}")
         
 
     def process_data(self, tab_separated):
@@ -140,9 +147,6 @@ class QoordiNetAppManager(BaseApp):
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
 
-    def delete_last(self, days: int | None = None):
-        selected_days = max((days or 0), 1)
-        self.logger.info(f"selected_days: {selected_days}")
 
     def revisedDataFrame(self, df: DataFrame):
         columnDroppedDF = df
