@@ -97,13 +97,17 @@ class QoordiNetAppManager(BaseApp):
         self.databaseManager = QoordiNetSQLiteManager()
         self.databaseManager.prepareEngine(sqlitePath=app_constants.SQLITE_PATH, shouldEcho=self.args.verbose)
 
-
-    def activities_list(self):
+    def __loadDataFrame(self):
         self.loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
         self.loadedDf.fillna('', inplace=True)
+        self.logger.info(f"self.loadedDf: {self.loadedDf}")
 
         self.last_activity = pd.to_datetime(self.loadedDf.loc[self.loadedDf.index[-1]]['Date'])
         self.logger.info(f"last_activity: {self.last_activity}")
+
+
+    def activities_list(self):
+        self.__loadDataFrame()
 
         generated_list = self.loadedDf.to_dict(orient='records')
         return generated_list
@@ -114,9 +118,8 @@ class QoordiNetAppManager(BaseApp):
         self.logger.info(f"selected_days: {selected_days}")
 
         if self.loadedDf is None:
-            self.activities_list
-            
-        self.logger.info(f"self.loadedDf: {self.loadedDf}")
+            self.__loadDataFrame()
+        
         
 
     def process_data(self, tab_separated):
