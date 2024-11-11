@@ -1,7 +1,7 @@
 async function deleteLast(buttonElement) {
     try {
         showSpinner()
-        const response = await fetch('/delete_last?days=0', {
+        const response = await fetch('/delete_last', {
             method: 'DELETE'
         });
         console.log(response)
