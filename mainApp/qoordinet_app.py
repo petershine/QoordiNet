@@ -124,13 +124,6 @@ class QoordiNetAppManager(BaseApp):
         if self.loadedDf.empty:
             self.__reloadDataFrame()
         
-        
-
-    def process_data(self, tab_separated):
-        rows = tab_separated.strip().split("\n")
-        processed_data = [row.split("\t") for row in rows]
-        return processed_data
-        
 
     def html_table(self, csv_file, shouldDisplayRaw: bool, styleClass: str):
         if shouldDisplayRaw is True:
