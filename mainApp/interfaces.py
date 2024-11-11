@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 
-from qoordinet_app import QoordiNetAppManager
+from .qoordinet_app import QoordiNetAppManager
 webAppManager: QoordiNetAppManager
 
 app = FastAPI()
