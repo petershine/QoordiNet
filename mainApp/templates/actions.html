@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html class="page-multi-forms">
+
 <head>
     <title>Actions</title>
     <link rel="stylesheet" type="text/css" href="/static/style.css">
 </head>
+
 <body class="page-multi-forms">
     <div id="loadingSpinner" style="display:none;">
         <div class="spinner"></div>
@@ -11,7 +13,9 @@
 
     <div class="form-container">
         <h2>Delete Last Days</h2>
-        <button class="file-upload-button" onclick="deleteLast(this)">Delete 1 day</button>
+        <form>
+            <button type="submit" onclick="deleteLast(this)">Delete 1 day</button>
+        </form>
     </div>
 
     <div class="form-container">
