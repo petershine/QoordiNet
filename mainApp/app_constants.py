@@ -10,6 +10,5 @@ PORT_NUMBER = 50002
 HTML_TEMPLATE_DIRECTORY = "mainApp/templates"
 HTML_TEMPLATE_INDEX = "index.html"
 HTML_TEMPLATE_ACTIONS = "actions.html"
-HTML_TEMPLATE_ACTIVITIES = "activities.html"
 
 HTML_STATIC_DIRECTORY = "mainApp/static"

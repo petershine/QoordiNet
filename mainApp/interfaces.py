@@ -22,9 +22,6 @@ def html_root(request: Request):
     return templates.TemplateResponse(app_constants.HTML_TEMPLATE_INDEX, {"request": request})
 
 
-@app.get("/activities_table", response_class=HTMLResponse)
-def page_activities_table(request: Request):
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_ACTIVITIES, {"request": request})
 @app.get("/actions", response_class=HTMLResponse)
 def html_actions(request: Request):
     return templates.TemplateResponse(app_constants.HTML_TEMPLATE_ACTIONS, {"request": request})
