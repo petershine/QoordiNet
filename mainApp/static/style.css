@@ -91,7 +91,7 @@ input[type="file"] {
     margin-bottom: 20 px;
 }
 
-button[type="submit"], input[type="submit"], input[type="button"] {
+button, input[type="submit"], input[type="button"] {
     background-color: lightblue;
     padding: 8px 15px;
     border: none;
@@ -100,7 +100,7 @@ button[type="submit"], input[type="submit"], input[type="button"] {
     font-size: 12pt;
 }
 
-button[type="submit"]:hover, input[type="submit"]:hover, input[type="submit"]:hover {
+button:hover, input[type="submit"]:hover, input[type="submit"]:hover {
     background-color: lightskyblue;
 }
 
