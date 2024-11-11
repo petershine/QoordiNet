@@ -35,10 +35,6 @@ def get_activities(request: Request, response_class=JSONResponse):
     json_activities = webAppManager.activities_list()
     return json_activities
 
-@app.post("/display_csv")
-async def display_csv(request: Request, csv_file: UploadFile = File(...), shouldDisplayRaw: bool = Form(False)):        
-    html_csv_table = webAppManager.html_table(csv_file=csv_file, shouldDisplayRaw=shouldDisplayRaw, styleClass="qoordinet_table")
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_CSV, {"request": request, "html_table": html_csv_table})
 
 @app.post("/save_into_database", response_class=RedirectResponse)
 async def save_into_database(request: Request, csv_file: UploadFile = File(...)):
@@ -55,11 +51,3 @@ async def build_database(request: Request, csv_file: UploadFile = File(...)):
 async def delete_last(days: int | None = None):
     webAppManager.delete_last(days=days)
     return RedirectResponse(url="/", status_code=303)
-
-
-
-
-@app.post("/display_tsv", response_class=HTMLResponse)
-async def display_data(request: Request, tab_separated: str = Form(...)):
-    data = webAppManager.process_data(tab_separated)
-    return templates.TemplateResponse(app_constants.HTML_TEMPLATE_DISPLAY_TSV, {"request": request, "data": data})
