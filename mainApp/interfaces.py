@@ -9,7 +9,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 
-webAppManager = None
+from qoordinet_app import QoordiNetAppManager
+webAppManager: QoordiNetAppManager
 
 app = FastAPI()
 templates = Jinja2Templates(directory=app_constants.HTML_TEMPLATE_DIRECTORY)
