@@ -10,6 +10,13 @@
     </div>
 
     <div class="form-container">
+        <h2>Delete Last Days</h2>
+        <form action="/delete_last" enctype="multipart/form-data" method="delete">
+            <button type="submit">Delete</button>
+        </form>
+    </div>
+
+    <div class="form-container">
         <h2>Process CSV</h2>
         <form action="/save_into_database" enctype="multipart/form-data" method="post">
             <input type="file" id="file-upload-0" name="csv_file" style="display: none;" onchange="revealFileName(this)"
