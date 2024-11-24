@@ -76,7 +76,9 @@ replacementHash = {'YOU SOLD OPENING TRANSACTION' : 'OPENING',
                    '\\(Cash\\)' : '',
                    }
 
-renamedColumnsHash = {runDateColumnKey : 'Date',
+dateColumnKey = 'Date'
+
+renamedColumnsHash = {runDateColumnKey : dateColumnKey,
                       symbolColumnKey : 'Ticker',
                       actionColumnKey : 'Note',
                       amountColumnKey : 'Activity',
@@ -104,7 +106,7 @@ class QoordiNetAppManager(BaseApp):
         self.loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
         self.loadedDf.fillna('', inplace=True)
         
-        self.last_activity = pd.to_datetime(self.loadedDf.loc[self.loadedDf.index[-1]]['Date'])
+        self.last_activity = pd.to_datetime(self.loadedDf.loc[self.loadedDf.index[-1]][dateColumnKey])
 
         self.logger.info(f"self.loadedDf: {self.loadedDf}")
         self.logger.info(f"last_activity: {self.last_activity}")
@@ -146,7 +148,7 @@ class QoordiNetAppManager(BaseApp):
     
     def build_database(self, csv_file, styleClass: str):
         df = pd.read_csv(csv_file.file, header=0)
-        runDateKeyMask = df['Date'].apply(self.is_date)
+        runDateKeyMask = df[dateColumnKey].apply(self.is_date)
         df = df[runDateKeyMask]
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
@@ -234,7 +236,7 @@ class QoordiNetAppManager(BaseApp):
         df.loc[(~is_option & ~is_other_transactions), actionColumnKey] = ''
         
 
-        current_latest = df.loc[df.index[-1]]['Run Date']
+        current_latest = df.loc[df.index[-1]][runDateColumnKey]
         numberOfDays = (current_latest - self.last_activity).days
         numberOfDays = max(min(numberOfDays, 30), 0)
         self.logger.info(f"current_latest: {current_latest}")
