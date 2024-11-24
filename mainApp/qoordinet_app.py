@@ -125,6 +125,11 @@ class QoordiNetAppManager(BaseApp):
 
         if self.loadedDf.empty:
             self.__reloadDataFrame()
+
+        selected_date = self.loadedDf.loc[self.loadedDf.index[-1]][dateColumnKey]
+        filteredDf = self.loadedDf[self.loadedDf[dateColumnKey] != selected_date]
+
+        filteredDf.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
         
 
     def html_table(self, csv_file, shouldDisplayRaw: bool, styleClass: str):
