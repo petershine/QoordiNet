@@ -12,6 +12,5 @@ async function deleteLast(buttonElement) {
     } catch (error) {
         console.error('Fetch error:', error);
     } finally {
-        hideSpinner()
     }
 }
