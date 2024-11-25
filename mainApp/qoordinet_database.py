@@ -2,7 +2,7 @@ from .qoordinet_orm import *
 
 from sqlalchemy import text, select
 from sqlalchemy.orm import Session
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy import Table, Column, Integer, Float, String, Boolean
 
 
