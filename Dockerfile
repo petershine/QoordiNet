@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir --upgrade -r ./mainApp/app_requirements.txt
 
 # [mainApp]
 COPY ./mainApp/*.py ./mainApp/
+COPY ./mainApp/*.json ./mainApp/
 COPY ./mainApp/templates ./mainApp/templates
 COPY ./mainApp/static ./mainApp/static
 

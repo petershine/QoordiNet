@@ -4,6 +4,8 @@ from ._shared.managers.baseapp import BaseApp
 import pandas as pd
 from pandas import DataFrame, Timestamp
 
+import json
+
 
 droppedColumnKeys = ['Exchange Quantity',
                      'Exchange Currency', 
@@ -100,6 +102,20 @@ class QoordiNetAppManager(BaseApp):
         self.databaseManager.prepareEngine(sqlitePath=app_constants.SQLITE_PATH, shouldEcho=self.args.verbose)
 
         self.loadedDf = DataFrame()
+
+
+    def __appConfiguration(self):
+        configurationData = None
+        try:
+            with open(app_constants.APP_CONFIGURATION, 'r') as file:
+                configurationData = json.load(file)
+        except FileNotFoundError:
+            self.logger.info(f"File not found: {app_constants.APP_CONFIGURATION}")
+        finally:
+            pass
+
+        self.logger.info(f"configurationData: {configurationData}")    
+        return configurationData
 
 
     def __reloadDataFrame(self):
@@ -237,6 +253,9 @@ class QoordiNetAppManager(BaseApp):
         df = df.drop(columns=droppableAuxColumns)
         
         df = df.replace(replacementHash, regex=True)
+        configurationData = self.__appConfiguration()
+        if configurationData != None:
+            df = df.replace(configurationData['replacementHash'], regex=True)
                         
         df.loc[(~is_option & ~is_other_transactions), actionColumnKey] = ''
         

@@ -170,3 +170,4 @@ cython_debug/
 **/lib64
 **/pyvenv.cfg
 **/include
+app_configuration.json
