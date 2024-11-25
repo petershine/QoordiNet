@@ -121,10 +121,6 @@ class QoordiNetAppManager(BaseApp):
     def __reloadDataFrame(self):
         self.loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
         self.loadedDf.fillna('', inplace=True)
-
-        configurationData = self.__appConfiguration()
-        if configurationData != None:
-            self.loadedDf = self.loadedDf.replace(configurationData['replacementHash'], regex=True)
         
         self.last_activity = pd.to_datetime(self.loadedDf.loc[self.loadedDf.index[-1]][dateColumnKey])
 
