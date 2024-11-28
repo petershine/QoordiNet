@@ -1,7 +1,7 @@
 from ._shared import constants
 from . import app_constants
 
-from fastapi import FastAPI, Form, Request
+from fastapi import FastAPI, Form, Request, Response
 from fastapi import File, UploadFile
 from fastapi.responses import JSONResponse, HTMLResponse, RedirectResponse
 
@@ -44,7 +44,7 @@ async def build_database(request: Request, csv_file: UploadFile = File(...)):
     return RedirectResponse(url="/", status_code=303)
 
 
-@app.delete("/delete_last", response_class=RedirectResponse)
+@app.delete("/delete_last")
 async def delete_last(days: int | None = None):
     webAppManager.delete_last(days=days)
-    return RedirectResponse(url="/", status_code=303)
+    return Response(status_code=200)

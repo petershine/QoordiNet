@@ -9,6 +9,9 @@ async function deleteLast(buttonElement) {
         if (response.redirected) {
             window.location.href = response.url;
         }
+        else if (response.ok){
+            location.reload()
+        }
     } catch (error) {
         console.error('Fetch error:', error);
     } finally {
