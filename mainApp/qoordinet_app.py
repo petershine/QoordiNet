@@ -223,6 +223,12 @@ class QoordiNetAppManager(BaseApp):
         df.loc[is_dividend, amountColumnKey] = None
         df.loc[is_dividend, quantityColumnKey] = None
 
+        is_passive = (df[actionColumnKey].str.contains('INTEREST EARNED', regex=True, case=False))
+        df.loc[is_passive, typeColumnKey] = 'passive'
+        df.loc[is_passive, symbolColumnKey] = 'interest'
+        df.loc[is_passive, quantityColumnKey] = df.loc[is_passive, amountColumnKey]
+        df.loc[is_passive, amountColumnKey] = None
+
         is_other_transactions = df[actionColumnKey].str.contains('DEBIT|DEPOSIT|Transfer|CASH CONTRIBUTION|FEE', regex=True, case=False)
         df.loc[is_other_transactions, quantityColumnKey] = None
 
