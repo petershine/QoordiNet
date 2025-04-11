@@ -1,7 +1,7 @@
 from ._shared import constants
 
 APP_NAME = "QoordiNet"
-APP_CONFIGURATION = "mainApp/app_configuration.json"
+APP_CONFIGURATION = f"{constants.MOUNTED_ROOT}/app_configuration.json"
 LOG_FILE_NAME = f"{APP_NAME}.log"
 LOG_FILE_PATH = f"{constants.MOUNTED_ROOT}/{LOG_FILE_NAME}"
 
