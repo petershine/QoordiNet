@@ -213,7 +213,7 @@ class QoordiNetAppManager(BaseApp):
         df.loc[is_option_not_assigned, amountColumnKey] = None
         df.loc[is_option_not_assigned, quantityColumnKey] = None
         
-        df[aux_tickerColumnKey] = df[symbolColumnKey].str.extract(r'-([A-Z]+)').fillna('')
+        df[aux_tickerColumnKey] = df[symbolColumnKey].str.extract(r'-([A-Z]+)').fillna('').astype(str)
         df.loc[is_option_not_assigned, symbolColumnKey] = df.loc[is_option_not_assigned, aux_tickerColumnKey]
             
     
@@ -249,9 +249,9 @@ class QoordiNetAppManager(BaseApp):
             
             pass
 
-        df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey]) #re-transform back to datetype
-        self.logger.info(f"df[{runDateColumnKey}]: {df[runDateColumnKey]}")
-        
+        df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey])
+
+        df[symbolColumnKey] = df[symbolColumnKey].str.strip()
 
 
         df = df.sort_values(by=sortingPriorityColumns, ascending=True)
