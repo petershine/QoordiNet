@@ -48,6 +48,5 @@ async function uploadFile(formId, endpointUrl) {
     } catch (error) {
         console.error('Error:', error);
     } finally {
-        hideSpinner()
     }
 }
