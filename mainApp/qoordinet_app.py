@@ -252,6 +252,7 @@ class QoordiNetAppManager(BaseApp):
         df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey])
 
         df[symbolColumnKey] = df[symbolColumnKey].str.strip()
+        df[actionColumnKey] = df[actionColumnKey].str.strip()
 
 
         df = df.sort_values(by=sortingPriorityColumns, ascending=True)
