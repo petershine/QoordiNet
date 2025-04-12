@@ -251,6 +251,8 @@ class QoordiNetAppManager(BaseApp):
 
         df[runDateColumnKey] = pd.to_datetime(df[runDateColumnKey])
 
+        df[accountColumnKey] = df[accountColumnKey].str.strip()
+        df[typeColumnKey] = df[typeColumnKey].str.strip()
         df[symbolColumnKey] = df[symbolColumnKey].str.strip()
         df[actionColumnKey] = df[actionColumnKey].str.strip()
 
