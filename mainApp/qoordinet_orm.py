@@ -26,6 +26,7 @@ class QoordiNetActivities(QoordiNetBase):
     activityType: Mapped[Optional[str]]
 
     ticker: Mapped[Optional[str]]
+    detail: Mapped[Optional[str]]
     note: Mapped[Optional[str]]
 
     premium: Mapped[Optional[float]]
@@ -34,6 +35,6 @@ class QoordiNetActivities(QoordiNetBase):
     share: Mapped[Optional[float]]
 
     def __repr__(self) -> str:
-        description = f"{self.__tablename__}(id={self.id!r}, runDate={self.runDate!r}, ticker={self.ticker!r}, activityType={self.activityType!r}, note={self.note!r})"
+        description = f"{self.__tablename__}(id={self.id!r}, runDate={self.runDate!r}, ticker={self.ticker!r}, detail={self.detail!r}, activityType={self.activityType!r}, note={self.note!r})"
 
         return description

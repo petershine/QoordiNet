@@ -91,6 +91,10 @@ renamedColumnsHash = {runDateColumnKey : dateColumnKey,
                       quantityColumnKey : 'Share',
                       }
 
+# added columns
+detailColumnKey = 'Detail'
+
+
 table_name = 'qoordinetActivities'
 
 class QoordiNetAppManager(BaseApp):
@@ -190,7 +194,8 @@ class QoordiNetAppManager(BaseApp):
             except KeyError:
                 pass
 
-        df = columnDroppedDF
+        columnReviseDF.insert(4, detailColumnKey, [])
+        df = columnReviseDF
         
 
         runDateKeyMask = df[runDateColumnKey].apply(self.is_date)
@@ -218,6 +223,7 @@ class QoordiNetAppManager(BaseApp):
         df.loc[is_option_not_assigned, quantityColumnKey] = None
         
         df[aux_tickerColumnKey] = df[symbolColumnKey].str.extract(r'-([A-Z]+)').fillna('').astype(str)
+        df.loc[is_option_not_assigned, detailColumnKey] = df.loc[is_option_not_assigned, symbolColumnKey]
         df.loc[is_option_not_assigned, symbolColumnKey] = df.loc[is_option_not_assigned, aux_tickerColumnKey]
             
     
