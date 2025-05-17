@@ -34,6 +34,7 @@ runDateColumnKey = 'Run Date'
 accountColumnKey = 'Account'
 typeColumnKey = 'Type'
 symbolColumnKey = 'Symbol'
+detailColumnKey = 'Detail'
 actionColumnKey = 'Action'
 premiumColumnKey = 'Premium'
 dividendColumnKey = 'Dividend'
@@ -41,6 +42,7 @@ amountColumnKey = 'Amount'
 quantityColumnKey = 'Quantity'
 
 newlyInsertedColumns = [typeColumnKey,
+                        detailColumnKey,
                         premiumColumnKey, 
                         dividendColumnKey,
                         ]
@@ -48,7 +50,8 @@ newlyInsertedColumns = [typeColumnKey,
 rearrangedColumns = [runDateColumnKey, 
                      accountColumnKey, 
                      typeColumnKey, 
-                     symbolColumnKey, 
+                     symbolColumnKey,
+                     detailColumnKey,
                      actionColumnKey,
                      premiumColumnKey, 
                      dividendColumnKey, 
@@ -65,7 +68,8 @@ droppableAuxColumns = [aux_debitColumnKey,
 
 sortingPriorityColumns = [runDateColumnKey, 
                           typeColumnKey, 
-                          symbolColumnKey, 
+                          symbolColumnKey,
+                          detailColumnKey,
                           actionColumnKey, 
                           aux_debitColumnKey,
                           ]
@@ -90,9 +94,6 @@ renamedColumnsHash = {runDateColumnKey : dateColumnKey,
                       amountColumnKey : 'Activity',
                       quantityColumnKey : 'Share',
                       }
-
-# added columns
-detailColumnKey = 'Detail'
 
 
 table_name = 'qoordinetActivities'
@@ -184,18 +185,18 @@ class QoordiNetAppManager(BaseApp):
 
 
     def revisedDataFrame(self, df: DataFrame):
-        columnReviseDF = df
-        columnReviseDF = columnReviseDF.drop(columns=droppedColumnKeys)
+        columnRearrangedDF = df
+        columnRearrangedDF = columnRearrangedDF.drop(columns=droppedColumnKeys)
         try:
-            columnReviseDF = columnReviseDF.drop(columns=droppedColumnKeys_olderBefore20240307)
+            columnRearrangedDF = columnRearrangedDF.drop(columns=droppedColumnKeys_olderBefore20240307)
         except KeyError:
             try:
-                columnReviseDF = columnReviseDF.drop(columns=droppedColumnKeys_newerSince20240307)
+                columnRearrangedDF = columnRearrangedDF.drop(columns=droppedColumnKeys_newerSince20240307)
             except KeyError:
                 pass
 
-        columnReviseDF.insert(4, detailColumnKey, [])
-        df = columnReviseDF
+        columnRearrangedDF.insert(4, detailColumnKey, [])
+        df = columnRearrangedDF
         
 
         runDateKeyMask = df[runDateColumnKey].apply(self.is_date)
