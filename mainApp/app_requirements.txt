@@ -1,2 +1,4 @@
+altair
 fastapi[all]
 pandas
+streamlit
