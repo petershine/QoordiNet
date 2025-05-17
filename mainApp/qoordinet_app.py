@@ -195,7 +195,8 @@ class QoordiNetAppManager(BaseApp):
             except KeyError:
                 pass
 
-        columnRearrangedDF.insert(4, detailColumnKey, [])
+        targetColumnIndex = columnRearrangedDF.columns.tolist().index(symbolColumnKey) + 1
+        columnRearrangedDF.insert(targetColumnIndex, detailColumnKey, '')
         df = columnRearrangedDF
         
 
