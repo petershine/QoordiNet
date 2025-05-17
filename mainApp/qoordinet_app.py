@@ -180,13 +180,13 @@ class QoordiNetAppManager(BaseApp):
 
 
     def revisedDataFrame(self, df: DataFrame):
-        columnDroppedDF = df
-        columnDroppedDF = columnDroppedDF.drop(columns=droppedColumnKeys)
+        columnReviseDF = df
+        columnReviseDF = columnReviseDF.drop(columns=droppedColumnKeys)
         try:
-            columnDroppedDF = columnDroppedDF.drop(columns=droppedColumnKeys_olderBefore20240307)
+            columnReviseDF = columnReviseDF.drop(columns=droppedColumnKeys_olderBefore20240307)
         except KeyError:
             try:
-                columnDroppedDF = columnDroppedDF.drop(columns=droppedColumnKeys_newerSince20240307)
+                columnReviseDF = columnReviseDF.drop(columns=droppedColumnKeys_newerSince20240307)
             except KeyError:
                 pass
 
