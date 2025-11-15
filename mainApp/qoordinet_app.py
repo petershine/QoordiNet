@@ -163,8 +163,8 @@ class QoordiNetAppManager(BaseApp):
             return df.to_html(classes=styleClass)
         
         df = pd.read_csv(csv_file.file, skiprows=2, header=0)
-        df = df.fillna('').astype(str)
         df = self.revisedDataFrame(df)
+        df.fillna('', inplace=True)
         generated_html = df.to_html(classes=styleClass, index=False)
 
         return generated_html
@@ -172,7 +172,6 @@ class QoordiNetAppManager(BaseApp):
     
     def save_into_database(self, csv_file, styleClass: str):
         df = pd.read_csv(csv_file.file, skiprows=2, header=0)
-        df = df.fillna('').astype(str)
         df = self.revisedDataFrame(df)
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
