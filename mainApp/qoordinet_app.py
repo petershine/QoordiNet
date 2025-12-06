@@ -273,7 +273,7 @@ class QoordiNetAppManager(BaseApp):
 
         df = df.drop(columns=droppableAuxColumns)
         
-        df = df.replace(replacementHash, regex=False)
+        df = df.replace(replacementHash, regex=True)
         configurationData = self.__appConfiguration()
         if configurationData != None:
             df = df.replace(configurationData['replacementHash'], regex=False)
