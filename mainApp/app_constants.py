@@ -1,7 +1,10 @@
 from ._shared import constants
 
 APP_NAME = "QoordiNet"
+
+#intentionally, making this to be a mounted file, so can be edited without rebuilding container
 APP_CONFIGURATION = f"{constants.MOUNTED_ROOT}/app_configuration.json"
+
 LOG_FILE_NAME = f"{APP_NAME}.log"
 LOG_FILE_PATH = f"{constants.MOUNTED_ROOT}/{LOG_FILE_NAME}"
 
