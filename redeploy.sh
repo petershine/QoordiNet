@@ -44,7 +44,7 @@ echo
 echo "[(Re)CREATE] container: \"$dockerContainerName\" from image: \"$dockerImageName\""
 docker create --name $dockerContainerName \
     --restart always \
-    -v $dockerVolumePath:$dockerMountedRoot \
+    -v ~/fXDocker/_volume:$dockerMountedRoot \
     -p $dockerPortNumber:$dockerPortNumber \
     $dockerImageName
 
