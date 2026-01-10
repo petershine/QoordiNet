@@ -156,6 +156,16 @@ class QoordiNetAppManager(BaseApp):
 
         filteredDf.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
         
+    def rebuildForAppConfiguration(self):
+        if self.loadedDf.empty:
+            self.__reloadDataFrame()
+
+        rebuiltDf = self.loadedDf.replace(replacementHash, regex=True)
+        configurationData = self.__appConfiguration()
+        if configurationData != None:
+            rebuiltDf = rebuiltDf.replace(configurationData['replacementHash'], regex=False)
+
+        rebuiltDf.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
 
     def html_table(self, csv_file, shouldDisplayRaw: bool, styleClass: str):
         if shouldDisplayRaw is True:

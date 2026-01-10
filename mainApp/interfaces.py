@@ -48,3 +48,8 @@ async def build_database(request: Request, csv_file: UploadFile = File(...)):
 async def delete_last(days: int | None = None):
     webAppManager.delete_last(days=days)
     return Response(status_code=200)
+
+@app.delete("/rebuildForAppConfiguration")
+async def rebuildForAppConfiguration():
+    webAppManager.rebuildForAppConfiguration()
+    return Response(status_code=200)    
