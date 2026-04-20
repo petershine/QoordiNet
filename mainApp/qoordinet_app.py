@@ -138,7 +138,11 @@ class QoordiNetAppManager(BaseApp):
     def activities_list(self):
         self.__reloadDataFrame()
 
-        generated_list = self.loadedDf.to_dict(orient='records')
+        aggregatedDf = self.loadedDf.groupby('Ticker').agg(
+            Premium=('Premium', 'sum'),
+            Share=('Ticker', 'count'))
+
+        generated_list = aggregatedDf.to_dict(orient='records')
         return generated_list
     
 
