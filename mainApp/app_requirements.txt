@@ -1,4 +1,3 @@
-altair
 fastapi[all]
 pandas
-streamlit
+starlette<1.0.0

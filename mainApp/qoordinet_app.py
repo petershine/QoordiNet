@@ -3,10 +3,8 @@ from ._shared.managers.baseapp import BaseApp
 
 import json
 
-import altair as alt
 import math
 import pandas as pd
-import streamlit as st
 
 from pandas import DataFrame, Timestamp
 
