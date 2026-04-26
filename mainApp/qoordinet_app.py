@@ -302,9 +302,48 @@ class QoordiNetAppManager(BaseApp):
         
         revisedDataFrame = df.rename(columns=renamedColumnsHash)
 
+        revisedDataFrame = self.aggregatedDataFrame(revisedDataFrame)
+
         return revisedDataFrame
 
     
+    def aggregatedDataFrame(self, df: DataFrame):
+        original_cols = df.columns.tolist()
+        key_cols = [dateColumnKey, 
+                    accountColumnKey, 
+                    typeColumnKey, 
+                    renamedColumnsHash[symbolColumnKey], 
+                    detailColumnKey, 
+                    renamedColumnsHash[actionColumnKey]]
+        sorting_keys = [dateColumnKey, 
+                        accountColumnKey, 
+                        typeColumnKey, 
+                        detailColumnKey]
+
+        is_option = df[typeColumnKey] == 'OPTION'
+        
+        rows_not_option = df[~is_option].copy()
+        rows_option = df[is_option].copy()
+        
+        rows_option_aggregated = rows_option.assign(
+            Premium=pd.to_numeric(rows_option[premiumColumnKey], errors='coerce')
+        ).groupby(key_cols, as_index=False).agg(
+            Premium=(premiumColumnKey, 'sum'),
+            Share=(detailColumnKey, 'count')
+        )
+        rows_option_aggregated = rows_option_aggregated.reindex(columns=original_cols)
+        
+
+        aggregatedDataFrame = pd.concat([rows_not_option, rows_option_aggregated], ignore_index=True)
+        aggregatedDataFrame = aggregatedDataFrame.astype(str).replace('nan', '')
+        aggregatedDataFrame.fillna('', inplace=True)
+
+        aggregatedDataFrame = aggregatedDataFrame.sort_values(by=sorting_keys, ascending=True)
+
+        self.logger.info(f"aggregatedDataFrame: {aggregatedDataFrame}")
+
+        return aggregatedDataFrame
+
 
     def is_date(self, value: str):
         try:
