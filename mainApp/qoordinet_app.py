@@ -331,6 +331,8 @@ class QoordiNetAppManager(BaseApp):
             Premium=(premiumColumnKey, 'sum'),
             Share=(detailColumnKey, 'count')
         )
+        rows_option_aggregated.loc[rows_option_aggregated[premiumColumnKey] > 0, renamedColumnsHash[quantityColumnKey]] *= -1
+        
         rows_option_aggregated = rows_option_aggregated.reindex(columns=original_cols)
         
 
