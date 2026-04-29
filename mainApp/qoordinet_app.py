@@ -194,19 +194,9 @@ class QoordiNetAppManager(BaseApp):
 
     def revisedDataFrame(self, df: DataFrame):
         df = self.columnRearrangedDataFrame(df)
-        
-        is_option = df[actionColumnKey].str.contains('CALL|PUT|CALLS|PUTS', regex=True, case=False)
-        df.loc[is_option, typeColumnKey] = 'OPTION'
-        
-        is_option_not_assigned = is_option & ~(df[actionColumnKey].str.contains('ASSIGNED', regex=True, case=False))
-        df.loc[is_option_not_assigned, premiumColumnKey] = df.loc[is_option_not_assigned, amountColumnKey]
-        df.loc[is_option_not_assigned, amountColumnKey] = None
-        df.loc[is_option_not_assigned, quantityColumnKey] = None
-        
-        df[aux_tickerColumnKey] = df[symbolColumnKey].str.extract(r'-([A-Z]+)').fillna('').astype(str)
-        df.loc[is_option_not_assigned, detailColumnKey] = df.loc[is_option_not_assigned, symbolColumnKey]
-        df.loc[is_option_not_assigned, symbolColumnKey] = df.loc[is_option_not_assigned, aux_tickerColumnKey]
-            
+
+        (df, is_option) = self.optionProcessedDataFrame(df)
+    
     
         is_dividend = (df[actionColumnKey].str.contains('DIVIDEND', case=False)) & (df[quantityColumnKey] == 0)
         df.loc[is_dividend, typeColumnKey] = 'dividend'
@@ -308,6 +298,23 @@ class QoordiNetAppManager(BaseApp):
 
         return df
     
+
+    def optionProcessedDataFrame(self, df: DataFrame):
+        is_option = df[actionColumnKey].str.contains('CALL|PUT|CALLS|PUTS', regex=True, case=False)
+        df.loc[is_option, typeColumnKey] = 'OPTION'
+        
+        is_option_not_assigned = is_option & ~(df[actionColumnKey].str.contains('ASSIGNED', regex=True, case=False))
+        df.loc[is_option_not_assigned, premiumColumnKey] = df.loc[is_option_not_assigned, amountColumnKey]
+        df.loc[is_option_not_assigned, amountColumnKey] = None
+        df.loc[is_option_not_assigned, quantityColumnKey] = None
+        
+        df[aux_tickerColumnKey] = df[symbolColumnKey].str.extract(r'-([A-Z]+)').fillna('').astype(str)
+        df.loc[is_option_not_assigned, detailColumnKey] = df.loc[is_option_not_assigned, symbolColumnKey]
+        df.loc[is_option_not_assigned, symbolColumnKey] = df.loc[is_option_not_assigned, aux_tickerColumnKey]
+
+        return (df, is_option)
+    
+
     def aggregatedDataFrame(self, df: DataFrame):
         original_cols = df.columns.tolist()
         key_cols = [dateColumnKey, 
