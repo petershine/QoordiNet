@@ -196,27 +196,8 @@ class QoordiNetAppManager(BaseApp):
         df = self.columnRearrangedDataFrame(df)
 
         (df, is_option) = self.optionProcessedDataFrame(df)
-    
-    
-        is_dividend = (df[actionColumnKey].str.contains('DIVIDEND', case=False)) & (df[quantityColumnKey] == 0)
-        df.loc[is_dividend, typeColumnKey] = 'dividend'
-        df.loc[is_dividend, dividendColumnKey] = df.loc[is_dividend, amountColumnKey]
-        df.loc[is_dividend, amountColumnKey] = None
-        df.loc[is_dividend, quantityColumnKey] = None
 
-        is_passive = (df[actionColumnKey].str.contains('INTEREST EARNED', regex=True, case=False))
-        df.loc[is_passive, typeColumnKey] = 'passive'
-        df.loc[is_passive, symbolColumnKey] = 'interest'
-        df.loc[is_passive, quantityColumnKey] = df.loc[is_passive, amountColumnKey]
-        df.loc[is_passive, amountColumnKey] = None
-
-        is_other_transactions = df[actionColumnKey].str.contains('DEBIT|DEPOSIT|Transfer|CASH CONTRIBUTION|FEE', regex=True, case=False)
-        df.loc[is_other_transactions, quantityColumnKey] = None
-
-        is_invested = ~is_option & (df[amountColumnKey].isna() == False) & (df[quantityColumnKey].isna() == False)
-        df.loc[is_invested, typeColumnKey] = 'Invested'
-
-        df[aux_debitColumnKey] = is_other_transactions
+        (df, is_other_transactions) = self.nonOptionsProcessedDataFrame(df, is_option)
 
 
         try:
@@ -313,6 +294,30 @@ class QoordiNetAppManager(BaseApp):
         df.loc[is_option_not_assigned, symbolColumnKey] = df.loc[is_option_not_assigned, aux_tickerColumnKey]
 
         return (df, is_option)
+    
+
+    def nonOptionsProcessedDataFrame(self, df: DataFrame, is_option: pd.Series):
+        is_dividend = (df[actionColumnKey].str.contains('DIVIDEND', case=False)) & (df[quantityColumnKey] == 0)
+        df.loc[is_dividend, typeColumnKey] = 'dividend'
+        df.loc[is_dividend, dividendColumnKey] = df.loc[is_dividend, amountColumnKey]
+        df.loc[is_dividend, amountColumnKey] = None
+        df.loc[is_dividend, quantityColumnKey] = None
+
+        is_passive = (df[actionColumnKey].str.contains('INTEREST EARNED', regex=True, case=False))
+        df.loc[is_passive, typeColumnKey] = 'passive'
+        df.loc[is_passive, symbolColumnKey] = 'interest'
+        df.loc[is_passive, quantityColumnKey] = df.loc[is_passive, amountColumnKey]
+        df.loc[is_passive, amountColumnKey] = None
+
+        is_other_transactions = df[actionColumnKey].str.contains('DEBIT|DEPOSIT|Transfer|CASH CONTRIBUTION|FEE', regex=True, case=False)
+        df.loc[is_other_transactions, quantityColumnKey] = None
+
+        is_invested = ~is_option & (df[amountColumnKey].isna() == False) & (df[quantityColumnKey].isna() == False)
+        df.loc[is_invested, typeColumnKey] = 'Invested'
+
+        df[aux_debitColumnKey] = is_other_transactions
+
+        return (df, is_other_transactions)
     
 
     def aggregatedDataFrame(self, df: DataFrame):
