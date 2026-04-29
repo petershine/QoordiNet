@@ -12,16 +12,6 @@
     </div>
 
     <div class="form-container">
-        <h2>Delete Last Days</h2>
-        <button onclick="deleteLast(this)">Delete 1 day</button>
-    </div>
-
-    <div class="form-container">
-        <h2>For App Configuration</h2>
-        <button onclick="rebuildForAppConfiguration(this)">Re-build</button>
-    </div>
-
-    <div class="form-container">
         <h2>Process CSV</h2>
         <form action="/save_into_database" enctype="multipart/form-data" method="POST">
             <input type="file" id="file-upload-0" name="csv_file" style="display: none;" onchange="revealFileName(this)"
@@ -31,6 +21,16 @@
 
             <button onclick="showSpinner()" type="submit">Save into Database</button>
         </form>
+    </div>
+
+    <div class="form-container">
+        <h2>Delete Last Days</h2>
+        <button onclick="deleteLast(this)">Delete 1 day</button>
+    </div>
+
+    <div class="form-container">
+        <h2>For App Configuration</h2>
+        <button onclick="rebuildForAppConfiguration(this)">Re-build</button>
     </div>
 
     <div class="form-container">
