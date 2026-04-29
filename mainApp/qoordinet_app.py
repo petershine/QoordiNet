@@ -193,37 +193,8 @@ class QoordiNetAppManager(BaseApp):
 
 
     def revisedDataFrame(self, df: DataFrame):
-        columnRearrangedDF = df
-        columnRearrangedDF = columnRearrangedDF.drop(columns=droppedColumnKeys)
-        try:
-            columnRearrangedDF = columnRearrangedDF.drop(columns=droppedColumnKeys_olderBefore20240307)
-        except KeyError:
-            try:
-                columnRearrangedDF = columnRearrangedDF.drop(columns=droppedColumnKeys_newerSince20240307)
-            except KeyError:
-                pass
-
-        targetColumnIndex = columnRearrangedDF.columns.tolist().index(symbolColumnKey) + 1
-        columnRearrangedDF.insert(targetColumnIndex, detailColumnKey, '')
-        df = columnRearrangedDF
+        df = self.columnRearrangedDataFrame(df)
         
-
-        runDateKeyMask = df[runDateColumnKey].apply(self.is_date)
-        actionKeyMask = df[actionColumnKey].apply(self.without_substring)
-        amountKeyMask = df[amountColumnKey].apply(self.is_not_zero)
-        quantityKeyMask = df[quantityColumnKey].apply(self.is_not_zero)
-
-        df = df[runDateKeyMask]
-        df = df[actionKeyMask]
-        df = df[amountKeyMask | quantityKeyMask]
-
-    
-        df[typeColumnKey] = ''
-        df[premiumColumnKey] = None
-        df[dividendColumnKey] = None
-        df = df[rearrangedColumns]
-
-
         is_option = df[actionColumnKey].str.contains('CALL|PUT|CALLS|PUTS', regex=True, case=False)
         df.loc[is_option, typeColumnKey] = 'OPTION'
         
@@ -306,6 +277,36 @@ class QoordiNetAppManager(BaseApp):
 
         return revisedDataFrame
 
+    def columnRearrangedDataFrame(self, df: DataFrame):
+        df = df.drop(columns=droppedColumnKeys)
+        try:
+            df = df.drop(columns=droppedColumnKeys_olderBefore20240307)
+        except KeyError:
+            try:
+                df = df.drop(columns=droppedColumnKeys_newerSince20240307)
+            except KeyError:
+                pass
+
+        targetColumnIndex = df.columns.tolist().index(symbolColumnKey) + 1
+        df.insert(targetColumnIndex, detailColumnKey, '')
+
+
+        runDateKeyMask = df[runDateColumnKey].apply(self.is_date)
+        actionKeyMask = df[actionColumnKey].apply(self.without_substring)
+        amountKeyMask = df[amountColumnKey].apply(self.is_not_zero)
+        quantityKeyMask = df[quantityColumnKey].apply(self.is_not_zero)
+
+        df = df[runDateKeyMask]
+        df = df[actionKeyMask]
+        df = df[amountKeyMask | quantityKeyMask]
+
+    
+        df[typeColumnKey] = ''
+        df[premiumColumnKey] = None
+        df[dividendColumnKey] = None
+        df = df[rearrangedColumns]
+
+        return df
     
     def aggregatedDataFrame(self, df: DataFrame):
         original_cols = df.columns.tolist()
