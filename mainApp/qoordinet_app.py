@@ -288,7 +288,7 @@ class QoordiNetAppManager(BaseApp):
         is_option_not_assigned = is_option & ~(df[actionColumnKey].str.contains('ASSIGNED', regex=True, case=False))
         df.loc[is_option_not_assigned, premiumColumnKey] = df.loc[is_option_not_assigned, amountColumnKey]
         df.loc[is_option_not_assigned, amountColumnKey] = None
-        df.loc[is_option_not_assigned, quantityColumnKey] = None
+        # df.loc[is_option_not_assigned, quantityColumnKey] = None
         
         df[aux_tickerColumnKey] = df[symbolColumnKey].str.extract(r'-([A-Z]+)').fillna('').astype(str)
         df.loc[is_option_not_assigned, detailColumnKey] = df.loc[is_option_not_assigned, symbolColumnKey]
@@ -313,7 +313,7 @@ class QoordiNetAppManager(BaseApp):
         is_other_transactions = df[actionColumnKey].str.contains('DEBIT|DEPOSIT|Transfer|CASH CONTRIBUTION|FEE', regex=True, case=False)
         df.loc[is_other_transactions, quantityColumnKey] = None
 
-        is_invested = ~is_option & (df[amountColumnKey].isna() == False) & (df[quantityColumnKey].isna() == False)
+        is_invested = ~is_option & (df[amountColumnKey].isna() == False) #& (df[quantityColumnKey].isna() == False)
         df.loc[is_invested, typeColumnKey] = 'Invested'
 
         df[aux_debitColumnKey] = is_other_transactions
@@ -343,9 +343,8 @@ class QoordiNetAppManager(BaseApp):
             Premium=pd.to_numeric(rows_option[premiumColumnKey], errors='coerce')
         ).groupby(key_cols, as_index=False).agg(
             Premium=(premiumColumnKey, 'sum'),
-            Share=(detailColumnKey, 'count')
+            Share=(renamedColumnsHash[quantityColumnKey], 'sum')
         )
-        rows_option_aggregated.loc[rows_option_aggregated[premiumColumnKey] > 0, renamedColumnsHash[quantityColumnKey]] *= -1
         
         rows_option_aggregated = rows_option_aggregated.reindex(columns=original_cols)
         
