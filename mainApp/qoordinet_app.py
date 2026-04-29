@@ -126,9 +126,7 @@ class QoordiNetAppManager(BaseApp):
 
 
     def __reloadDataFrame(self):
-        self.loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)
-        self.loadedDf.fillna('', inplace=True)
-        
+        self.loadedDf = pd.read_sql_table(table_name, self.databaseManager.engine)        
         self.last_activity = pd.to_datetime(self.loadedDf.loc[self.loadedDf.index[-1]][dateColumnKey])
 
         self.logger.info(f"self.loadedDf: {self.loadedDf}")
@@ -171,8 +169,9 @@ class QoordiNetAppManager(BaseApp):
             return df.to_html(classes=styleClass)
         
         df = pd.read_csv(csv_file.file, skiprows=2, header=0)
+        
         df = self.revisedDataFrame(df)
-        df.fillna('', inplace=True)
+        
         generated_html = df.to_html(classes=styleClass, index=False)
 
         return generated_html
@@ -180,12 +179,15 @@ class QoordiNetAppManager(BaseApp):
     
     def save_into_database(self, csv_file, styleClass: str):
         df = pd.read_csv(csv_file.file, skiprows=2, header=0)
+
         df = self.revisedDataFrame(df)
+        df = self.aggregatedDataFrame(df)
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
     
     def build_database(self, csv_file, styleClass: str):
         df = pd.read_csv(csv_file.file, header=0)
+
         runDateKeyMask = df[dateColumnKey].apply(self.is_date)
         df = df[runDateKeyMask]
 
@@ -243,8 +245,6 @@ class QoordiNetAppManager(BaseApp):
         df = selected_rows
         
         df = df.rename(columns=renamedColumnsHash)
-
-        df = self.aggregatedDataFrame(df)
 
         return df
 
