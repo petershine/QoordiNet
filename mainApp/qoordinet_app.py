@@ -242,11 +242,12 @@ class QoordiNetAppManager(BaseApp):
         selected_rows = df[df[runDateColumnKey].isin(latest_dates)]
         df = selected_rows
         
-        revisedDataFrame = df.rename(columns=renamedColumnsHash)
+        df = df.rename(columns=renamedColumnsHash)
 
-        revisedDataFrame = self.aggregatedDataFrame(revisedDataFrame)
+        df = self.aggregatedDataFrame(df)
 
-        return revisedDataFrame
+        return df
+
 
     def columnRearrangedDataFrame(self, df: DataFrame):
         df = df.drop(columns=droppedColumnKeys)
