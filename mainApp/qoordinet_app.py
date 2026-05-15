@@ -329,10 +329,9 @@ class QoordiNetAppManager(BaseApp):
                     renamedColumnsHash[symbolColumnKey], 
                     detailColumnKey, 
                     renamedColumnsHash[actionColumnKey]]
-        sorting_keys = [dateColumnKey, 
-                        accountColumnKey, 
-                        typeColumnKey, 
-                        detailColumnKey]
+        
+        sorting_keys = key_cols.copy()
+        sorting_keys.remove(accountColumnKey)
 
         is_option = df[typeColumnKey] == 'OPTION'
         
