@@ -333,35 +333,24 @@ class QoordiNetAppManager(BaseApp):
         sorting_keys = key_cols.copy()
         sorting_keys.remove(accountColumnKey)
 
-        is_option = df[typeColumnKey] == 'OPTION'
-        
-        rows_not_option = df[~is_option].copy()
-        rows_option = df[is_option].copy()
-        
-        rows_not_option_aggregated = rows_not_option.assign(
-            Dividend=pd.to_numeric(rows_not_option[dividendColumnKey], errors='coerce'),
-            Activity=pd.to_numeric(rows_not_option[renamedColumnsHash[amountColumnKey]], errors='coerce'),
+        aggregatedDataFrame = df.assign(
+            Premium=pd.to_numeric(df[premiumColumnKey], errors='coerce'),
+            Dividend=pd.to_numeric(df[dividendColumnKey], errors='coerce'),
+            Activity=pd.to_numeric(df[renamedColumnsHash[amountColumnKey]], errors='coerce'),
         ).groupby(key_cols, as_index=False).agg(
+            Premium=(premiumColumnKey, 'sum'),
             Dividend=(dividendColumnKey, 'sum'),
             Activity=(renamedColumnsHash[amountColumnKey], 'sum'),
             Share=(renamedColumnsHash[quantityColumnKey], 'sum')
         )
-        rows_not_option_aggregated = rows_not_option_aggregated.reindex(columns=original_cols)
+        aggregatedDataFrame.reindex(columns=original_cols)
 
-        rows_option_aggregated = rows_option.assign(
-            Premium=pd.to_numeric(rows_option[premiumColumnKey], errors='coerce')
-        ).groupby(key_cols, as_index=False).agg(
-            Premium=(premiumColumnKey, 'sum'),
-            Share=(renamedColumnsHash[quantityColumnKey], 'sum')
-        )
-        rows_option_aggregated = rows_option_aggregated.reindex(columns=original_cols)
         
-
-        aggregatedDataFrame = pd.concat([rows_not_option_aggregated, rows_option_aggregated], ignore_index=True)
-        aggregatedDataFrame = aggregatedDataFrame.astype(str).replace('nan', '')
+        aggregatedDataFrame.astype(str).replace('nan', '', inplace=True)
+        aggregatedDataFrame.replace(0, None, inplace=True)
         aggregatedDataFrame.fillna('', inplace=True)
 
-        aggregatedDataFrame = aggregatedDataFrame.sort_values(by=sorting_keys, ascending=True)
+        aggregatedDataFrame.sort_values(by=sorting_keys, ascending=True)
 
         self.logger.info(f"aggregatedDataFrame: {aggregatedDataFrame}")
 
