@@ -338,17 +338,26 @@ class QoordiNetAppManager(BaseApp):
         rows_not_option = df[~is_option].copy()
         rows_option = df[is_option].copy()
         
+        rows_not_option_aggregated = rows_not_option.assign(
+            Dividend=pd.to_numeric(rows_not_option[dividendColumnKey], errors='coerce'),
+            Activity=pd.to_numeric(rows_not_option[renamedColumnsHash[amountColumnKey]], errors='coerce'),
+        ).groupby(key_cols, as_index=False).agg(
+            Dividend=(dividendColumnKey, 'sum'),
+            Activity=(renamedColumnsHash[amountColumnKey], 'sum'),
+            Share=(renamedColumnsHash[quantityColumnKey], 'sum')
+        )
+        rows_not_option_aggregated = rows_not_option_aggregated.reindex(columns=original_cols)
+
         rows_option_aggregated = rows_option.assign(
             Premium=pd.to_numeric(rows_option[premiumColumnKey], errors='coerce')
         ).groupby(key_cols, as_index=False).agg(
             Premium=(premiumColumnKey, 'sum'),
             Share=(renamedColumnsHash[quantityColumnKey], 'sum')
         )
-        
         rows_option_aggregated = rows_option_aggregated.reindex(columns=original_cols)
         
 
-        aggregatedDataFrame = pd.concat([rows_not_option, rows_option_aggregated], ignore_index=True)
+        aggregatedDataFrame = pd.concat([rows_not_option_aggregated, rows_option_aggregated], ignore_index=True)
         aggregatedDataFrame = aggregatedDataFrame.astype(str).replace('nan', '')
         aggregatedDataFrame.fillna('', inplace=True)
 
