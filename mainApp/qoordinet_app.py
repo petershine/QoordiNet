@@ -156,12 +156,12 @@ class QoordiNetAppManager(BaseApp):
         if self.loadedDf.empty:
             self.__reloadDataFrame()
 
-        rebuiltDf = self.loadedDf.replace(replacementHash, regex=True)
+        self.loadedDf.replace(replacementHash, regex=True, inplace=True)
         configurationData = self.__appConfiguration()
         if configurationData != None:
-            rebuiltDf = rebuiltDf.replace(configurationData['replacementHash'], regex=False)
+            self.loadedDf.replace(configurationData['replacementHash'], regex=False, inplace=True)
 
-        rebuiltDf.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
+        self.loadedDf.to_sql(table_name, con=self.databaseManager.engine, if_exists='replace', index=False)
 
     def html_table(self, csv_file, shouldDisplayRaw: bool, styleClass: str):
         if shouldDisplayRaw is True:
@@ -221,14 +221,14 @@ class QoordiNetAppManager(BaseApp):
         df[actionColumnKey] = df[actionColumnKey].str.strip()
 
 
-        df = df.sort_values(by=sortingPriorityColumns, ascending=True)
+        df.sort_values(by=sortingPriorityColumns, ascending=True, inplace=True)
 
-        df = df.drop(columns=droppableAuxColumns)
+        df.drop(columns=droppableAuxColumns, inplace=True)
         
-        df = df.replace(replacementHash, regex=True)
+        df.replace(replacementHash, regex=True, inplace=True)
         configurationData = self.__appConfiguration()
         if configurationData != None:
-            df = df.replace(configurationData['replacementHash'], regex=False)
+            df.replace(configurationData['replacementHash'], regex=False, inplace=True)
                         
         df.loc[(~is_option & ~is_other_transactions), actionColumnKey] = ''
         
@@ -244,18 +244,18 @@ class QoordiNetAppManager(BaseApp):
         selected_rows = df[df[runDateColumnKey].isin(latest_dates)]
         df = selected_rows
         
-        df = df.rename(columns=renamedColumnsHash)
+        df.rename(columns=renamedColumnsHash, inplace=True)
 
         return df
 
 
     def columnRearrangedDataFrame(self, df: DataFrame):
-        df = df.drop(columns=droppedColumnKeys)
+        df.drop(columns=droppedColumnKeys, inplace=True)
         try:
-            df = df.drop(columns=droppedColumnKeys_olderBefore20240307)
+            df.drop(columns=droppedColumnKeys_olderBefore20240307, inplace=True)
         except KeyError:
             try:
-                df = df.drop(columns=droppedColumnKeys_newerSince20240307)
+                df.drop(columns=droppedColumnKeys_newerSince20240307, inplace=True)
             except KeyError:
                 pass
 
@@ -350,9 +350,7 @@ class QoordiNetAppManager(BaseApp):
         aggregatedDataFrame.replace(0, None, inplace=True)
         aggregatedDataFrame.fillna('', inplace=True)
 
-        aggregatedDataFrame.sort_values(by=sorting_keys, ascending=True)
-
-        self.logger.info(f"aggregatedDataFrame: {aggregatedDataFrame}")
+        aggregatedDataFrame.sort_values(by=sorting_keys, ascending=True, inplace=True)
 
         return aggregatedDataFrame
 
