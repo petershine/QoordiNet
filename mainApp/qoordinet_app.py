@@ -190,6 +190,7 @@ class QoordiNetAppManager(BaseApp):
         aggregated_rows_option = self.aggregatedDataFrame(rows_option)
 
         df = pd.concat([rows_not_option, aggregated_rows_option], ignore_index=True)
+        df.sort_values(by=[dateColumnKey], ascending=True, inplace=True)
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
     
