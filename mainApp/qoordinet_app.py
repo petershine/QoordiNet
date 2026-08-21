@@ -181,7 +181,14 @@ class QoordiNetAppManager(BaseApp):
         df = pd.read_csv(csv_file.file, skiprows=2, header=0)
 
         df = self.revisedDataFrame(df)
-        df = self.aggregatedDataFrame(df)
+
+        is_option = df[typeColumnKey] == 'OPTION'
+        rows_not_option = df[~is_option].copy()
+        
+        rows_option = df[is_option].copy()
+        aggregated_rows_option = self.aggregatedDataFrame(rows_option)
+
+        df = pd.concat([rows_not_option, aggregated_rows_option], ignore_index=True)
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
     
