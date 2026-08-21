@@ -5,13 +5,14 @@ async function fetchAndDisplayData() {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const jsonData = await response.json(); // This is your array of dictionaries
-        console.log(jsonData)
+        const jsonData = await response.json();
+        const dataArray = JSON.parse(jsonData);
+        console.log(dataArray);
 
 
         const table = document.getElementsByClassName('qoordinet_table')[0].getElementsByTagName('tbody')[0];
 
-        jsonData.forEach(item => {
+        dataArray.forEach(item => {
             const row = table.insertRow();
 
             Object.values(item).forEach((text, index) => {

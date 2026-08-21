@@ -109,6 +109,7 @@ class QoordiNetAppManager(BaseApp):
         self.databaseManager.prepareEngine(sqlitePath=app_constants.SQLITE_PATH, shouldEcho=self.args.verbose)
 
         self.loadedDf = DataFrame()
+        self.last_activity = pd.Timestamp.today() - pd.Timedelta(days=30)
 
 
     def __appConfiguration(self):
@@ -136,7 +137,7 @@ class QoordiNetAppManager(BaseApp):
     def activities_list(self):
         self.__reloadDataFrame()
 
-        generated_list = self.loadedDf.to_dict(orient='records')
+        generated_list = self.loadedDf.to_json(orient='records')
         return generated_list
     
 
@@ -355,7 +356,6 @@ class QoordiNetAppManager(BaseApp):
         
         aggregatedDataFrame.astype(str).replace('nan', '', inplace=True)
         aggregatedDataFrame.replace(0, None, inplace=True)
-        aggregatedDataFrame.fillna('', inplace=True)
 
         aggregatedDataFrame.sort_values(by=sorting_keys, ascending=True, inplace=True)
 
