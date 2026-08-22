@@ -182,14 +182,13 @@ class QoordiNetAppManager(BaseApp):
         df = pd.read_csv(csv_file.file, skiprows=2, header=0)
 
         df = self.revisedDataFrame(df)
-
-        is_option = df[typeColumnKey] == 'OPTION'
-        rows_not_option = df[~is_option].copy()
         
-        rows_option = df[is_option].copy()
-        aggregated_rows_option = self.aggregatedDataFrame(rows_option)
+        is_without_ticker = df[renamedColumnsHash[symbolColumnKey]].isna()
+        rows_without_ticker = df[is_without_ticker].copy()
 
-        df = pd.concat([rows_not_option, aggregated_rows_option], ignore_index=True)
+        aggregated_rows_option = self.aggregatedDataFrame(df)
+        
+        df = pd.concat([rows_without_ticker, aggregated_rows_option], ignore_index=True)
         df.sort_values(by=[dateColumnKey], ascending=True, inplace=True)
 
         df.to_sql(table_name, con=self.databaseManager.engine, if_exists='append', index=False)
@@ -346,6 +345,7 @@ class QoordiNetAppManager(BaseApp):
             Premium=pd.to_numeric(df[premiumColumnKey], errors='coerce'),
             Dividend=pd.to_numeric(df[dividendColumnKey], errors='coerce'),
             Activity=pd.to_numeric(df[renamedColumnsHash[amountColumnKey]], errors='coerce'),
+            Share=pd.to_numeric(df[renamedColumnsHash[quantityColumnKey]], errors='coerce')
         ).groupby(key_cols, as_index=False).agg(
             Premium=(premiumColumnKey, 'sum'),
             Dividend=(dividendColumnKey, 'sum'),
