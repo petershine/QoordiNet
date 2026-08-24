@@ -95,6 +95,7 @@ renamedColumnsHash = {runDateColumnKey : dateColumnKey,
 
 
 table_name = 'qoordinetActivities'
+default_range_of_days = 90
 
 class QoordiNetAppManager(BaseApp):
     loadedDf: DataFrame
@@ -109,7 +110,7 @@ class QoordiNetAppManager(BaseApp):
         self.databaseManager.prepareEngine(sqlitePath=app_constants.SQLITE_PATH, shouldEcho=self.args.verbose)
 
         self.loadedDf = DataFrame()
-        self.last_activity = pd.Timestamp.today() - pd.Timedelta(days=30)
+        self.last_activity = pd.Timestamp.today() - pd.Timedelta(days=default_range_of_days)
 
 
     def __appConfiguration(self):
@@ -243,7 +244,7 @@ class QoordiNetAppManager(BaseApp):
 
         current_latest = df.loc[df.index[-1]][runDateColumnKey]
         numberOfDays = (current_latest - self.last_activity).days
-        numberOfDays = max(min(numberOfDays, 30), 0)
+        numberOfDays = max(min(numberOfDays, default_range_of_days), 0)
         self.logger.info(f"current_latest: {current_latest}")
         self.logger.info(f"last_activity: {self.last_activity}")
         self.logger.info(f"numberOfDays: {numberOfDays}")
